@@ -448,8 +448,11 @@ class CocoDataset(CustomDataset):
                     val = float(f'{cocoEval.stats[i + 6]:.3f}')
                     eval_results[item] = val
             else:
+                print("cocoEval.evaluate()")
                 cocoEval.evaluate()
+                print("cocoEval.accumulate()")
                 cocoEval.accumulate()
+                print("cocoEval.summarize()")
                 cocoEval.summarize()
                 if classwise:  # Compute per-category AP
                     # Compute per-category AP
