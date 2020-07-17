@@ -528,7 +528,7 @@ class ADE20KDataset(CustomDataset):
                     mean_recall = -1
                 else:
                     mean_recall = np.mean(recall[recall > -1])
-                mean_F1 = 2*mean_recall*mean_precision/(mean_recall+mean_precision+np. np.spacing(1))
+                mean_F1 = 2*mean_recall*mean_precision/(mean_recall+mean_precision+np.spacing(1))
                 print(
                     iStr.format(titleStr, typeStr, iouStr, areaRng, maxDets,
                                 mean_F1))
