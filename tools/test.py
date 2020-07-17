@@ -70,7 +70,8 @@ def parse_args():
 
 def main():
     args = parse_args()
-    warnings.simplefilter('ignore',UserWarning)
+
+    warnings.filterwarnings('ignore')
 
     assert args.out or args.eval or args.format_only or args.show \
         or args.show_dir, \
