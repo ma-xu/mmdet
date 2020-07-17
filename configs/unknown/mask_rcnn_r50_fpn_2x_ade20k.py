@@ -133,7 +133,7 @@ test_cfg = dict(
 
 
 
-dataset_type = 'ADE20kDataset'
+dataset_type = 'ADE20KDataset'
 data_root = 'data/ADE20K/'
 img_norm_cfg = dict(
     # refer https://github.com/CSAILVision/semantic-segmentation-pytorch/blob/master/mit_semseg/dataset.py
