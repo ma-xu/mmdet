@@ -393,7 +393,7 @@ class ADE20KDataset(CustomDataset):
         scores = -np.ones((T, R, K, A, M))
 
         # create dictionary for future indexing
-        _pe = self._paramsEval
+        _pe = cocoEval._paramsEval
         catIds = _pe.catIds if _pe.useCats else [-1]
         setK = set(catIds)
         setA = set(map(tuple, _pe.areaRng))
