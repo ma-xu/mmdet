@@ -415,7 +415,7 @@ class ADE20KDataset(CustomDataset):
             for a, a0 in enumerate(a_list):
                 Na = a0 * I0
                 for m, maxDet in enumerate(m_list):
-                    E = [self.evalImgs[Nk + Na + i] for i in i_list]
+                    E = [cocoEval.evalImgs[Nk + Na + i] for i in i_list]
                     E = [e for e in E if e is not None]
                     if len(E) == 0:
                         continue
