@@ -12,6 +12,7 @@ from mmdet.apis import multi_gpu_test, single_gpu_test
 from mmdet.core import wrap_fp16_model
 from mmdet.datasets import build_dataloader, build_dataset
 from mmdet.models import build_detector
+import warnings
 
 
 def parse_args():
@@ -69,6 +70,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    warnings.simplefilter('ignore',UserWarning)
 
     assert args.out or args.eval or args.format_only or args.show \
         or args.show_dir, \
