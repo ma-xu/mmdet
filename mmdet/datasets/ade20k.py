@@ -450,9 +450,16 @@ class ADE20KDataset(CustomDataset):
                     val = float(f'{cocoEval.stats[i + 6]:.3f}')
                     eval_results[item] = val
             else:
+                print("evaluate start")
                 cocoEval.evaluate()
+                print("evaluate end")
+                print("accumulate start")
                 cocoEval.accumulate()
+                print("accumulate end")
+                print("summarize start")
                 cocoEval.summarize()
+                print("summarize end")
+
                 if classwise:  # Compute per-category AP
                     # Compute per-category AP
                     # from https://github.com/facebookresearch/detectron2/
