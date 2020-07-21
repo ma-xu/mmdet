@@ -706,7 +706,7 @@ class ADE20KDataset(CustomDataset):
             else:
 
                 cocoEval.evaluate()
-                
+
                 # print("accumulate start")
                 # cocoEval.accumulate()
                 # print("accumulate end")
