@@ -54,6 +54,8 @@ def multiclass_nms_helper(multi_bboxes,
     print(dets.shape)
     print(keep.shape)
     print("cls_score shape: {}".format(cls_score.shape))
+    print(bboxes.shape)
+    print(valid_mask.shape)
 
     if max_num > 0:
         dets = dets[:max_num]
