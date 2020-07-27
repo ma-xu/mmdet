@@ -5,6 +5,7 @@ from torch.nn.modules.utils import _pair
 
 from mmdet.core import (auto_fp16, build_bbox_coder, force_fp32, multi_apply,
                         multiclass_nms)
+from mmdet.helper import multiclass_nms_helper
 from mmdet.models.builder import HEADS, build_loss
 from mmdet.models.losses import accuracy
 
@@ -218,7 +219,10 @@ class BBoxHead(nn.Module):
         if cfg is None:
             return bboxes, scores
         else:
-            det_bboxes, det_labels = multiclass_nms(bboxes, scores,
+            # det_bboxes, det_labels = multiclass_nms(bboxes, scores,
+            #                                         cfg.score_thr, cfg.nms,
+            #                                         cfg.max_per_img)
+            det_bboxes, det_labels = multiclass_nms_helper(bboxes, scores,
                                                     cfg.score_thr, cfg.nms,
                                                     cfg.max_per_img)
             print(det_labels.shape)
