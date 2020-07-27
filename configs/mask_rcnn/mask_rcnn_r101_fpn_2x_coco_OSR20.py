@@ -48,3 +48,4 @@ data = dict(
         img_prefix=data_root + 'val2017/',
         pipeline=test_pipeline))
 evaluation = dict(metric=['segm'])
+resume_from = './work_dirs/mask_rcnn_r101_fpn_2x_coco_OSR20/epoch_12.pth'
