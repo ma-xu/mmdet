@@ -198,6 +198,8 @@ class BBoxHead(nn.Module):
         print(cls_score.shape)
         print(isinstance(cls_score, list))
         print(cls_score)
+        print(rois.shape)
+        print(rois)
         scores = F.softmax(cls_score, dim=1) if cls_score is not None else None
 
         if bbox_pred is not None:
