@@ -34,9 +34,12 @@ def multiclass_nms_helper(multi_bboxes,
     else:
         bboxes = multi_bboxes[:, None].expand(-1, num_classes, 4)
     scores = multi_scores[:, :-1]
+    print(bboxes.shape)
+    print(cls_score.shape)
     cls_score = cls_score[:,:-1]
     # filter out boxes with low scores
     valid_mask = scores > score_thr
+    print(valid_mask.shape)
 
     bboxes = bboxes[valid_mask]
     if score_factors is not None:
