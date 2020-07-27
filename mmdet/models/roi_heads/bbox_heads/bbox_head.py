@@ -195,11 +195,7 @@ class BBoxHead(nn.Module):
                    cfg=None):
         if isinstance(cls_score, list):
             cls_score = sum(cls_score) / float(len(cls_score))
-        print(cls_score.shape)
-        print(isinstance(cls_score, list))
-        print(cls_score)
-        print(rois.shape)
-        print(rois)
+
         scores = F.softmax(cls_score, dim=1) if cls_score is not None else None
 
         if bbox_pred is not None:
@@ -225,7 +221,8 @@ class BBoxHead(nn.Module):
             det_bboxes, det_labels = multiclass_nms(bboxes, scores,
                                                     cfg.score_thr, cfg.nms,
                                                     cfg.max_per_img)
-
+            print(det_labels.shape)
+            print(det_labels)
             return det_bboxes, det_labels
 
     @force_fp32(apply_to=('bbox_preds', ))
