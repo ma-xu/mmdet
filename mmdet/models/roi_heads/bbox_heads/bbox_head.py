@@ -222,7 +222,7 @@ class BBoxHead(nn.Module):
             # det_bboxes, det_labels = multiclass_nms(bboxes, scores,
             #                                         cfg.score_thr, cfg.nms,
             #                                         cfg.max_per_img)
-            det_bboxes, det_labels = multiclass_nms_helper(bboxes, scores,
+            det_bboxes, det_labels,det_cls_score = multiclass_nms_helper(bboxes, scores,cls_score,
                                                     cfg.score_thr, cfg.nms,
                                                     cfg.max_per_img)
             print(det_labels.shape)

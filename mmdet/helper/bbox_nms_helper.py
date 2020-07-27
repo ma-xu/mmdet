@@ -4,6 +4,7 @@ from mmcv.ops.nms import batched_nms
 
 def multiclass_nms_helper(multi_bboxes,
                    multi_scores,
+                   cls_score,
                    score_thr,
                    nms_cfg,
                    max_num=-1,
@@ -36,6 +37,10 @@ def multiclass_nms_helper(multi_bboxes,
 
     # filter out boxes with low scores
     valid_mask = scores > score_thr
+    print(scores.shape)
+    print(bboxes.shape)
+    print(valid_mask.shape)
+    print(cls_score.shape)
     bboxes = bboxes[valid_mask]
     if score_factors is not None:
         scores = scores * score_factors[:, None]
