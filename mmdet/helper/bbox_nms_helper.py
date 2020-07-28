@@ -65,5 +65,6 @@ def multiclass_nms_helper(multi_bboxes,
     if max_num > 0:
         dets = dets[:max_num]
         keep = keep[:max_num]
-
+    print(dets.shape)
+    print(keep.shape)
     return dets, labels[keep]
