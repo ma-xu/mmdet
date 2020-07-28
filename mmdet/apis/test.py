@@ -24,10 +24,6 @@ def single_gpu_test(model,
     for i, data in enumerate(data_loader):
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
-            a,b,feature_results = result
-            result = a,b
-            print(feature_results)
-            print(feature_results)
 
 
         if show or out_dir:
@@ -57,9 +53,9 @@ def single_gpu_test(model,
 
         # encode mask results
         if isinstance(result, tuple):
-            bbox_results, mask_results = result
+            bbox_results, mask_results, feature_results = result
             encoded_mask_results = encode_mask_results(mask_results)
-            result = bbox_results, encoded_mask_results
+            result = bbox_results, encoded_mask_results, feature_results
         results.append(result)
 
         batch_size = len(data['img_metas'][0].data)
@@ -99,9 +95,9 @@ def multi_gpu_test(model, data_loader, tmpdir=None, gpu_collect=False):
             result = model(return_loss=False, rescale=True, **data)
             # encode mask results
             if isinstance(result, tuple):
-                bbox_results, mask_results = result
+                bbox_results, mask_results, feature_results = result
                 encoded_mask_results = encode_mask_results(mask_results)
-                result = bbox_results, encoded_mask_results
+                result = bbox_results, encoded_mask_results, feature_results
         results.append(result)
 
         if rank == 0:
