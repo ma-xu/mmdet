@@ -24,7 +24,6 @@ def single_gpu_test(model,
     for i, data in enumerate(data_loader):
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
-            print(result.shape)
             print(result)
             print(result)
 
