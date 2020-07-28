@@ -40,6 +40,7 @@ def multiclass_nms_helper(multi_bboxes,
     print("valid_mask.shape {}".format(valid_mask.shape))
 
     print(bboxes.shape)
+    print(cls_score.shape)
     bboxes = bboxes[valid_mask]
     print(bboxes.shape)
     print(valid_mask)
