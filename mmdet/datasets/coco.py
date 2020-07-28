@@ -251,7 +251,7 @@ class CocoDataset(CustomDataset):
                     data['bbox'] = self.xyxy2xywh(bboxes[i])
                     data['score'] = float(bboxes[i][4])
                     data['feature'] = features[i]
-                    print(data['feature'])
+                    print(data['feature'].shape)
                     if data['score']>score_threshold:
                         data['category_id'] = self.cat_ids[label]
                     else:
