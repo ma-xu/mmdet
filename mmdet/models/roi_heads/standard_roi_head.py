@@ -255,7 +255,7 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         bbox_results = bbox2result(det_bboxes, det_labels,
                                    self.bbox_head.num_classes)
         feature_results = features2result(features, det_labels,
-                                   self.bbox_head.num_classess)
+                                   self.bbox_head.num_classes)
         print(len(bbox_results))
         print(len(feature_results))
 
