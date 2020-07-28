@@ -170,7 +170,6 @@ class BaseDetector(nn.Module, metaclass=ABCMeta):
         if return_loss:
             return self.forward_train(img, img_metas, **kwargs)
         else:
-            a,b,c = self.forward_test(img, img_metas, **kwargs)
             return self.forward_test(img, img_metas, **kwargs)
 
     def _parse_losses(self, losses):
