@@ -49,7 +49,7 @@ def multiclass_nms_helper(multi_bboxes,
     if bboxes.numel() == 0:
         bboxes = multi_bboxes.new_zeros((0, 5))
         labels = multi_bboxes.new_zeros((0, ), dtype=torch.long)
-        return bboxes, labels
+        return bboxes, labels,multi_bboxes.new_zeros((0, num_classes))
 
     dets, keep = batched_nms(bboxes, scores, labels, nms_cfg)
 
