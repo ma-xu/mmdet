@@ -41,7 +41,6 @@ def multiclass_nms_helper(multi_bboxes,
     valid_mask = scores > score_thr
     bboxes = bboxes[valid_mask]
     cls_score_expanded = cls_score_expanded[valid_mask]
-    print(cls_score_expanded.shape)
     if score_factors is not None:
         scores = scores * score_factors[:, None]
     scores = scores[valid_mask]
@@ -53,6 +52,8 @@ def multiclass_nms_helper(multi_bboxes,
         return bboxes, labels
 
     dets, keep = batched_nms(bboxes, scores, labels, nms_cfg)
+    print(keep.shape)
+    print(keep)
 
     if max_num > 0:
         dets = dets[:max_num]
