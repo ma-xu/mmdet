@@ -257,6 +257,8 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         print(bbox_results.__len__())
         print(bbox_results[0])
         print(bbox_results)
+        for i in range(0,len(bbox_results)):
+            print(bbox_results[i].shape)
 
         if not self.with_mask:
             return bbox_results
