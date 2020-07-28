@@ -254,6 +254,9 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         bbox_results = bbox2result(det_bboxes, det_labels,
                                    self.bbox_head.num_classes)
 
+        print(bbox_results.shape)
+        print(bbox_results)
+
         if not self.with_mask:
             return bbox_results
         else:
