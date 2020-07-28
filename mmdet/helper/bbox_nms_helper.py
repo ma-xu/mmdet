@@ -35,7 +35,7 @@ def multiclass_nms_helper(multi_bboxes,
         bboxes = multi_bboxes[:, None].expand(-1, num_classes, 4)
     scores = multi_scores[:, :-1]
     cls_score = cls_score[:,:-1]
-    cls_score_expanded = cls_score.expand(-1, num_classes, num_classes)
+    cls_score_expanded = cls_score.expand(cls_score.shape[0], num_classes, num_classes)
     print(cls_score_expanded[:,1,:] == cls_score)
     print(cls_score_expanded.shape)
 
