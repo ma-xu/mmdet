@@ -222,11 +222,11 @@ class BBoxHead(nn.Module):
             # det_bboxes, det_labels = multiclass_nms(bboxes, scores,
             #                                         cfg.score_thr, cfg.nms,
             #                                         cfg.max_per_img)
-            det_bboxes, det_labels,features = multiclass_nms_helper(bboxes, scores,cls_score,
+            det_bboxes, det_labels, features = multiclass_nms_helper(bboxes, scores,cls_score,
                                                     cfg.score_thr, cfg.nms,
                                                     cfg.max_per_img)
 
-            return det_bboxes, det_labels
+            return det_bboxes, det_labels, features
 
     @force_fp32(apply_to=('bbox_preds', ))
     def refine_bboxes(self, rois, labels, bbox_preds, pos_is_gts, img_metas):
