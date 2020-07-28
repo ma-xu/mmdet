@@ -253,6 +253,11 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
             x, img_metas, proposal_list, self.test_cfg, rescale=rescale)
         bbox_results = bbox2result(det_bboxes, det_labels,
                                    self.bbox_head.num_classes)
+        print(det_bboxes.shape)
+        print(features.shape)
+        print(det_labels.shape)
+        print(len(bbox_results))
+        print(bbox_results[0].shape)
 
         if not self.with_mask:
             return bbox_results
