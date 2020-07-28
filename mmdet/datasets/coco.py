@@ -240,10 +240,12 @@ class CocoDataset(CustomDataset):
         segm_json_results = []
         for idx in range(len(self)):
             img_id = self.img_ids[idx]
-            det, seg, feature = results[idx]
+            det, seg, feat = results[idx]
             for label in range(len(det)):
                 # bbox results
                 bboxes = det[label]
+                features = feat[label]
+                print(features.shape)
                 for i in range(bboxes.shape[0]):
                     data = dict()
                     data['image_id'] = img_id
