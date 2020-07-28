@@ -245,12 +245,13 @@ class CocoDataset(CustomDataset):
                 # bbox results
                 bboxes = det[label]
                 features = feat[label]
-                print(features.shape)
                 for i in range(bboxes.shape[0]):
                     data = dict()
                     data['image_id'] = img_id
                     data['bbox'] = self.xyxy2xywh(bboxes[i])
                     data['score'] = float(bboxes[i][4])
+                    data['feature'] = features[i]
+                    print(data['feature'])
                     if data['score']>score_threshold:
                         data['category_id'] = self.cat_ids[label]
                     else:
