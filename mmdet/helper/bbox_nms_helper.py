@@ -45,7 +45,9 @@ def multiclass_nms_helper(multi_bboxes,
     if score_factors is not None:
         scores = scores * score_factors[:, None]
     scores = scores[valid_mask]
+    print(scores.shape)
     cls_score = cls_score[valid_mask]
+    print(cls_score.shape)
     labels = valid_mask.nonzero()[:, 1]
 
     if bboxes.numel() == 0:
