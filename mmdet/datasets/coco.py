@@ -235,12 +235,12 @@ class CocoDataset(CustomDataset):
 
     def _segm2json(self, results):
         """Convert instance segmentation results to COCO json style."""
-        score_threshold=0.05
+        score_threshold=0.0
         bbox_json_results = []
         segm_json_results = []
         for idx in range(len(self)):
             img_id = self.img_ids[idx]
-            det, seg = results[idx]
+            det, seg, feature = results[idx]
             for label in range(len(det)):
                 # bbox results
                 bboxes = det[label]
@@ -249,7 +249,7 @@ class CocoDataset(CustomDataset):
                     data['image_id'] = img_id
                     data['bbox'] = self.xyxy2xywh(bboxes[i])
                     data['score'] = float(bboxes[i][4])
-                    if data['score']>=score_threshold:
+                    if data['score']>score_threshold:
                         data['category_id'] = self.cat_ids[label]
                     else:
                         data['category_id'] = 21
@@ -652,6 +652,7 @@ class CocoDataset(CustomDataset):
         Returns:
             dict[str, float]: COCO style evaluation metric.
         """
+
 
         metrics = metric if isinstance(metric, list) else [metric]
         allowed_metrics = ['bbox', 'segm', 'proposal', 'proposal_fast']
