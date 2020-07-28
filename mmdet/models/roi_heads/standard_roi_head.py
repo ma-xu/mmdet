@@ -256,12 +256,7 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
                                    self.bbox_head.num_classes)
         feature_results = features2result(features, det_labels,
                                    self.bbox_head.num_classes)
-        print(len(bbox_results))
-        print(len(feature_results))
-        for i in range(0, len(bbox_results)):
-            print("________{}___________".format(i))
-            print("bbox shape: {}".format(bbox_results[i].shape))
-            print("feat shape: {}".format(feature_results[i].shape))
+
 
 
         if not self.with_mask:
@@ -269,7 +264,7 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         else:
             segm_results = self.simple_test_mask(
                 x, img_metas, det_bboxes, det_labels, rescale=rescale)
-            return bbox_results, segm_results
+            return bbox_results, segm_results, feature_results
 
     def aug_test(self, x, proposal_list, img_metas, rescale=False):
         """Test with augmentations.
