@@ -78,11 +78,12 @@ def evaluate(cocoeval):
     catIds = p.catIds if p.useCats else [-1]
 
     if p.iouType == 'segm' or p.iouType == 'bbox':
-        computeIoU = cocoeval.computeIoU
+        cocoeval.ious = {(imgId, catId): computeIoUhelper(cocoeval,imgId, catId)
+                         for imgId in p.imgIds for catId in catIds}
     elif p.iouType == 'keypoints':
         computeIoU = cocoeval.computeOks
-    cocoeval.ious = {(imgId, catId): computeIoU(imgId, catId)
-                 for imgId in p.imgIds for catId in catIds}
+        cocoeval.ious = {(imgId, catId): computeIoU(imgId, catId)
+                     for imgId in p.imgIds for catId in catIds}
 
     evaluateImg = cocoeval.evaluateImg
     maxDet = p.maxDets[-1]
@@ -93,3 +94,33 @@ def evaluate(cocoeval):
     cocoeval._paramsEval = copy.deepcopy(cocoeval.params)
     toc = time.time()
     print('DONE (t={:0.2f}s).'.format(toc - tic))
+
+
+def computeIoUhelper(cocoeval, imgId, catId):
+    p = cocoeval.params
+    if p.useCats:
+        gt = cocoeval._gts[imgId, catId]
+        dt = cocoeval._dts[imgId, catId]
+    else:
+        gt = [_ for cId in p.catIds for _ in cocoeval._gts[imgId, cId]]
+        dt = [_ for cId in p.catIds for _ in cocoeval._dts[imgId, cId]]
+    if len(gt) == 0 and len(dt) == 0:
+        return []
+    inds = np.argsort([-d['score'] for d in dt], kind='mergesort')
+    dt = [dt[i] for i in inds]
+    if len(dt) > p.maxDets[-1]:
+        dt = dt[0:p.maxDets[-1]]
+
+    if p.iouType == 'segm':
+        g = [g['segmentation'] for g in gt]
+        d = [d['segmentation'] for d in dt]
+    elif p.iouType == 'bbox':
+        g = [g['bbox'] for g in gt]
+        d = [d['bbox'] for d in dt]
+    else:
+        raise Exception('unknown iouType for iou computation')
+
+    # compute iou between each dt and gt region
+    iscrowd = [int(o['iscrowd']) for o in gt]
+    ious = maskUtils.iou(d, g, iscrowd)
+    return ious
