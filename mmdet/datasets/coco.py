@@ -793,7 +793,9 @@ class CocoDataset(CustomDataset):
             if metric not in result_files:
                 raise KeyError(f'{metric} is not in results')
             try:
-                cocoDt = cocoGt.loadRes(result_files[metric])
+                # cocoDt = cocoGt.loadRes(result_files[metric])
+                from mmdet.helper.helpers import loadRes
+                cocoDt = loadRes(cocoGt, result_files[metric])
             except IndexError:
                 print_log(
                     'The testing results of the whole dataset is empty.',
