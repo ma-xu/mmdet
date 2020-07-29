@@ -165,7 +165,8 @@ def computeCentroids(cocoeval, iou_thr=0.75):
             max_ious = ious.max(axis=1)
             indexes = np.where(max_ious>iou_thr)[0]
             select_fea = [fea[i] for i in indexes]
-            centroids[catId].append(select_fea)
+            for v in select_fea:
+                centroids[catId].append(v)
 
 
     for catId in catIds:
