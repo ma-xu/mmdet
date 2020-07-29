@@ -11,6 +11,7 @@ from mmcv.utils import print_log
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 from terminaltables import AsciiTable
+from mmdet.helper import cocoevalhelper
 
 from mmdet.core import eval_recalls
 from .builder import DATASETS
@@ -822,7 +823,8 @@ class CocoDataset(CustomDataset):
                     eval_results[item] = val
             else:
 
-                cocoEval.evaluate()
+                # cocoEval.evaluate()
+                cocoevalhelper.evaluate(cocoEval)
                 # cocoEval.accumulate()
                 self.accumulate(cocoEval)
                 self.summarize(cocoEval)
