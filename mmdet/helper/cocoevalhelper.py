@@ -152,6 +152,7 @@ def computeCentroids(cocoeval):
             if p.iouType == 'segm':
                 g = [g['segmentation'] for g in gt]
                 d = [d['segmentation'] for d in dt]
+                fea = [d['feature'] for d in dt]
             elif p.iouType == 'bbox':
                 g = [g['bbox'] for g in gt]
                 d = [d['bbox'] for d in dt]
@@ -161,3 +162,5 @@ def computeCentroids(cocoeval):
             # compute iou between each dt and gt region
             iscrowd = [int(o['iscrowd']) for o in gt]
             ious = maskUtils.iou(d, g, iscrowd)
+            print(catId)
+            print(ious)
