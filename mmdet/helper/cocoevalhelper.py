@@ -2,7 +2,6 @@ import copy
 import datetime
 import time
 from collections import defaultdict
-
 import numpy as np
 
 # from . import mask as maskUtils
@@ -125,13 +124,14 @@ def computeIoUhelper(cocoeval, imgId, catId):
     ious = maskUtils.iou(d, g, iscrowd)
     return ious
 
-def computeCentroids(cocoeval):
+def computeCentroids(cocoeval, iou_thr=0.75):
     p = cocoeval.params
     p.imgIds = list(np.unique(p.imgIds))
     if p.useCats:
         p.catIds = list(np.unique(p.catIds))
     catIds = p.catIds if p.useCats else [-1]
 
+    centroids = {catId: [] for catId in catIds}
     # cocoeval.ious = {(imgId, catId): computeIoUhelper(cocoeval, imgId, catId)
     #                  for imgId in p.imgIds for catId in catIds}
     for imgId in p.imgIds:
@@ -142,7 +142,7 @@ def computeCentroids(cocoeval):
             else:
                 gt = [_ for cId in p.catIds for _ in cocoeval._gts[imgId, cId]]
                 dt = [_ for cId in p.catIds for _ in cocoeval._dts[imgId, cId]]
-            if len(gt) == 0 and len(dt) == 0:
+            if len(gt) == 0 or len(dt) == 0:
                 continue
             inds = np.argsort([-d['score'] for d in dt], kind='mergesort')
             dt = [dt[i] for i in inds]
@@ -162,5 +162,11 @@ def computeCentroids(cocoeval):
             # compute iou between each dt and gt region
             iscrowd = [int(o['iscrowd']) for o in gt]
             ious = maskUtils.iou(d, g, iscrowd)
-            print(catId)
-            print(ious)
+            max_ious = ious.max(axis=1)
+            indexes = np.where(max_ious>iou_thr)[0]
+            select_fea = [fea[i] for i in indexes]
+            centroids[catId].append(select_fea)
+
+
+    for catId in catIds:
+        print("class {} length is : {}".format(catId,len(centroids[catId])))
