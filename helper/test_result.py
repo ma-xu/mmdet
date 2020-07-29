@@ -116,9 +116,12 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/result')
-            print(result_files)
-            print(tmp_dir)
+            # result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/result')
+            # print(result_files)
+            # print(tmp_dir)
+            result_files = {'bbox': '/home/xuma/mmdet/result.bbox.json',
+                            'proposal': '/home/xuma/mmdet/result.bbox.json',
+                            'segm': '/home/xuma/mmdet/result.segm.json'}
             dataset.evaluate(outputs, args.eval, **kwargs)
 
 
