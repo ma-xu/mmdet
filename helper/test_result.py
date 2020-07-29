@@ -111,9 +111,6 @@ def main():
 
     rank, _ = get_dist_info()
     if rank == 0:
-        if args.out:
-            print(f'\nwriting results to {args.out}')
-            mmcv.dump(outputs, args.out)
         kwargs = {} if args.options is None else args.options
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
