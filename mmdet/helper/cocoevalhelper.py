@@ -170,4 +170,6 @@ def computeCentroids(cocoeval, iou_thr=0.75):
 
 
     for catId in catIds:
+        if len(centroids[catId])>0:
+            centroids[catId] = np.sum(centroids[catId],axis=0)/len(centroids[catId])
         print("class {} length is : {}".format(catId,len(centroids[catId])))
