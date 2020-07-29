@@ -693,7 +693,6 @@ class CocoDataset(CustomDataset):
                     logger=logger,
                     level=logging.ERROR)
                 break
-            print(cocoDt)
             iou_type = 'bbox' if metric == 'proposal' else metric
             cocoEval = COCOeval(cocoGt, cocoDt, iou_type)
             cocoEval.params.catIds = self.cat_ids
