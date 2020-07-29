@@ -825,6 +825,10 @@ class CocoDataset(CustomDataset):
 
                 # cocoEval.evaluate()
                 cocoevalhelper.evaluate(cocoEval)
+
+                ############calculate centroids ######################
+                cocoevalhelper.computeCentroids(cocoEval)
+
                 # cocoEval.accumulate()
                 self.accumulate(cocoEval)
                 self.summarize(cocoEval)
