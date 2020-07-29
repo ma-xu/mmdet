@@ -119,10 +119,11 @@ def main():
             # result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/result')
             # print(result_files)
             # print(tmp_dir)
+            # dataset.evaluate(outputs, args.eval, **kwargs)
             result_files = {'bbox': '/home/xuma/mmdet/result.bbox.json',
                             'proposal': '/home/xuma/mmdet/result.bbox.json',
                             'segm': '/home/xuma/mmdet/result.segm.json'}
-            dataset.evaluate(outputs, args.eval, **kwargs)
+            dataset.evaluate2(result_files, args.eval, **kwargs)
 
 
 if __name__ == '__main__':
