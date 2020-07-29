@@ -10,8 +10,9 @@ from tools.fuse_conv_bn import fuse_module
 
 from mmdet.apis import multi_gpu_test, single_gpu_test
 from mmdet.core import wrap_fp16_model
-from mmdet.datasets import build_dataloader, build_dataset,coco
+from mmdet.datasets import build_dataloader, build_dataset
 from mmdet.models import build_detector
+from mmdet.datasets.coco import CocoDataset
 import warnings
 
 
@@ -115,7 +116,7 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            result_files, tmp_dir = coco.format_results(outputs, None)
+            result_files, tmp_dir = CocoDataset.format_results(outputs, None)
             print(result_files)
             print(tmp_dir)
             dataset.evaluate(outputs, args.eval, **kwargs)
