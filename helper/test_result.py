@@ -116,7 +116,7 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            result_files, tmp_dir = CocoDataset.format_results(outputs, None)
+            result_files, tmp_dir = CocoDataset.format_results(results=outputs, jsonfile_prefix=None)
             print(result_files)
             print(tmp_dir)
             dataset.evaluate(outputs, args.eval, **kwargs)
