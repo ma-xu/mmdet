@@ -3,6 +3,7 @@ import datetime
 import time
 from collections import defaultdict
 import numpy as np
+import pickle
 
 # from . import mask as maskUtils
 from pycocotools.coco import maskUtils
@@ -124,7 +125,7 @@ def computeIoUhelper(cocoeval, imgId, catId):
     ious = maskUtils.iou(d, g, iscrowd)
     return ious
 
-def computeCentroids(cocoeval, iou_thr=0.75):
+def computeCentroids(cocoeval, iou_thr=0.75, save_path='centroids.pkl'):
     p = cocoeval.params
     p.imgIds = list(np.unique(p.imgIds))
     if p.useCats:
@@ -172,4 +173,9 @@ def computeCentroids(cocoeval, iou_thr=0.75):
     for catId in catIds:
         if len(centroids[catId])>0:
             centroids[catId] = np.sum(centroids[catId],axis=0)/len(centroids[catId])
-        print("class {} length is : {}".format(catId,len(centroids[catId])))
+        # print("class {} length is : {}".format(catId,len(centroids[catId])))
+
+    # mm = pickle.load(open("centroids.pkl", "rb"))
+    filehandler = open(save_path, 'wb')
+    pickle.dump(centroids, filehandler)
+    print("centroids have been saved to: {}".format(save_path))
