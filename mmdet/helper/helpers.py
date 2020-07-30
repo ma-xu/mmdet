@@ -31,7 +31,7 @@ def loadRes(coco, resFile):
             if os.path.exists(filepath):
                 print("loading {}".format(filepath))
                 anns_sub = json.load(open(filepath))
-                anns.append(anns_sub)
+                anns.extend(anns_sub)
             else:
                 print("Finish load all segm json files")
                 break
