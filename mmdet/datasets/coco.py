@@ -315,7 +315,17 @@ class CocoDataset(CustomDataset):
             print("Start dump bbox json.")
             mmcv.dump(json_results[0], result_files['bbox'])
             print("Start dump segm json.")
-            mmcv.dump(json_results[1], result_files['segm'])
+            if len(json_results[0])<=20000:
+                mmcv.dump(json_results[1], result_files['segm'])
+            else:
+                print("Split segm into {} parts, each includes 10000 images".format(len(json_results[0])//10000))
+                for i in range(0,len(json_results[0])//10000):
+                    print("Start dump segm {} json.".format(i))
+                    mmcv.dump(json_results[1][i*10000:(i+1)*10000], f'{outfile_prefix}.segm{i}.json')
+                if len(json_results[0])>(i+1)*10000:
+                    print("Start dump segm last json.")
+                    mmcv.dump(json_results[1][(i + 1) * 10000:], f'{outfile_prefix}.segm{i+1}.json')
+
             print("Finish dumping files")
         elif isinstance(results[0], np.ndarray):
             json_results = self._proposal2json(results)
