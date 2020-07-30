@@ -312,8 +312,11 @@ class CocoDataset(CustomDataset):
             result_files['bbox'] = f'{outfile_prefix}.bbox.json'
             result_files['proposal'] = f'{outfile_prefix}.bbox.json'
             result_files['segm'] = f'{outfile_prefix}.segm.json'
+            print("Start dump bbox json.")
             mmcv.dump(json_results[0], result_files['bbox'])
+            print("Start dump segm json.")
             mmcv.dump(json_results[1], result_files['segm'])
+            print("Finish dumping files")
         elif isinstance(results[0], np.ndarray):
             json_results = self._proposal2json(results)
             result_files['proposal'] = f'{outfile_prefix}.proposal.json'
