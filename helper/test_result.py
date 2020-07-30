@@ -109,6 +109,7 @@ def main():
     dataset = build_dataset(cfg.data.test)
 
     outputs = mmcv.load(args.out)
+    print("Output loaded!!")
 
     rank, _ = get_dist_info()
     if rank == 0:
@@ -116,13 +117,15 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            # result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/result')
-            # print(result_files)
-            # print(tmp_dir)
+            result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/result_train')
+            print("format files dones!!!")
+
+            print(result_files)
+            print(tmp_dir)
             # dataset.evaluate(outputs, args.eval, **kwargs)
-            result_files = {'bbox': '/home/xuma/mmdet/result.bbox.json',
-                            'proposal': '/home/xuma/mmdet/result.bbox.json',
-                            'segm': '/home/xuma/mmdet/result.segm.json'}
+            # result_files = {'bbox': '/home/xuma/mmdet/result_train.bbox.json',
+            #                 'proposal': '/home/xuma/mmdet/result_train.bbox.json',
+            #                 'segm': '/home/xuma/mmdet/result_train.segm.json'}
             dataset.evaluate2(result_files, args.eval, **kwargs)
 
 
