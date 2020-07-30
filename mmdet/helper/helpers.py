@@ -25,7 +25,16 @@ def loadRes(coco, resFile):
     print('Loading and preparing results...')
     tic = time.time()
     if type(resFile) == str:
-        anns = json.load(open(resFile))
+        anns= [ ]
+        for i in range(0,1000000):
+            filepath = resFile+'.segm'+str(i)+'.json'
+            if os.path.exists(filepath):
+                print("loading {}".format(filepath))
+                anns_sub = json.load(open(filepath))
+                anns.append(anns_sub)
+            else:
+                print("Finish load all segm json files")
+                break
     elif type(resFile) == np.ndarray:
         anns = coco.loadNumpyAnnotations(resFile)
     else:
@@ -79,4 +88,5 @@ def loadRes(coco, resFile):
 
     res.dataset['annotations'] = anns
     res.createIndex()
+    print("Finish load cocoDt")
     return res
