@@ -14,6 +14,7 @@ from mmdet.datasets import build_dataloader, build_dataset
 from mmdet.models import build_detector
 from mmdet.datasets.coco import CocoDataset
 import warnings
+from mmdet.helper.openmax import *
 
 
 def parse_args():
@@ -21,7 +22,10 @@ def parse_args():
         description='Lightweight MMDet test (and eval) a model from the results.pkl')
     parser.add_argument('config', help='test config file path')
     parser.add_argument('checkpoint', help='checkpoint file')
-    parser.add_argument('--out', default='/home/xuma/mmdet/work_dirs/mask_rcnn_r101_fpn_2x_coco_OSR20/result_val.pkl', help='output result file in pickle format')
+    parser.add_argument('--out', default='/home/xuma/mmdet/work_dirs/mask_rcnn_r101_fpn_2x_coco_OSR20/result_val.pkl',
+                        help='output result file in pickle format')
+    parser.add_argument('--weibull', default='/home/xuma/mmdet/weibull_model.pkl.pkl',
+                        help='output result file in pickle format')
     parser.add_argument(
         '--fuse-conv-bn',
         action='store_true',
@@ -110,8 +114,17 @@ def main():
 
     outputs = mmcv.load(args.out)
 
+    weibull_model = mmcv.load(args.weibull)
+
+    new_out= []
     for image in outputs:
         bboxes, segs, feas = image
+        so, _ = openmax(weibull_model, dataset.CLASSES, feas, 0.5, 3, "euclidean")
+        seg = np.argsort(segs, so)
+        bbox = np.argsort(bboxes,so)
+        fea = np.argsort(feas,so)
+        sub_out = bbox,seg,fea
+        new_out.append(sub_out)
 
 
 
@@ -121,10 +134,10 @@ def main():
     if rank == 0:
         kwargs = {} if args.options is None else args.options
         if args.format_only:
-            dataset.format_results(outputs, **kwargs)
+            dataset.format_results(new_out, **kwargs)
         if args.eval:
 
-            dataset.evaluate3(outputs, args.eval, **kwargs)
+            dataset.evaluate3(new_out, args.eval, **kwargs)
 
 
 if __name__ == '__main__':
