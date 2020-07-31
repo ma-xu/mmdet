@@ -175,6 +175,9 @@ def computeCentroids(cocoeval, iou_thr=0.75, save_path='centroids.pkl'):
 
     for catId in catIds:
         if len(centroids[catId])>0:
+            filehandler = open('scores_'+str(catId)+'.pkl', 'wb')
+            pickle.dump(centroids[catId], filehandler)
+            print("Scores of class {} have been saved to: {}".format(catId,save_path))
             centroids[catId] = np.sum(centroids[catId],axis=0)/len(centroids[catId])
         # print("class {} length is : {}".format(catId,len(centroids[catId])))
 
