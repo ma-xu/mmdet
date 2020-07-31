@@ -67,6 +67,8 @@ def main():
     centroids = mmcv.load(args.centroids)
     print("Centroids loaded!!")
 
+    dists=[]
+    mavs = []
     for i in range(0,len(dataset.CLASSES)):
         catid = i+1
         if os.path.exists(args.score_path+str(catid)+'.pkl'):
@@ -81,9 +83,11 @@ def main():
         except:
             centroid= []
         dist = compute_channel_distances(centroid,score)
-        print("Finish calculating dist for class {}.".format(catid))
+        # print("Finish calculating dist for class {}.".format(catid))
+        dists.append(dist)
+        mavs.append(centroid)
 
-
+    weibull_model = fit_weibull(mavs,dists, dataset.CLASSES,200,'euclidean')
 
 
 
