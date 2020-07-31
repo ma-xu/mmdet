@@ -16,6 +16,8 @@ def features2result(features, labels, num_classes):
     """
     print(features.shape)
     print(labels.shape)
+    print(labels)
+    print(num_classes)
     if features.shape[0] == 0:
         return [np.zeros((0, num_classes), dtype=np.float32) for i in range(num_classes)]
     else:
