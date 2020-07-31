@@ -22,6 +22,7 @@ def parse_args():
     parser.add_argument('config', help='test config file path')
     parser.add_argument('--centroids', default='/home/xuma/mmdet/centroids.pkl', help='centroids path')
     parser.add_argument('--score_path', default='/home/xuma/mmdet/scores_', help='score path')
+    parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
