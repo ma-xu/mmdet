@@ -169,9 +169,9 @@ def computeCentroids(cocoeval, iou_thr=0.75, save_path='centroids.pkl'):
             for v in select_fea:
                 centroids[catId].append(v)
 
-    filehandler = open('scores.pkl', 'wb')
-    pickle.dump(centroids, filehandler)
-    print("Scores have been saved to: {}".format(save_path))
+    # filehandler = open('scores.pkl', 'wb')
+    # pickle.dump(centroids, filehandler)
+    # print("Scores have been saved to: {}".format(save_path))
 
     for catId in catIds:
         if len(centroids[catId])>0:
