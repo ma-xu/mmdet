@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument('checkpoint', help='checkpoint file')
     parser.add_argument('--out', default='/home/xuma/mmdet/work_dirs/mask_rcnn_r101_fpn_2x_coco_OSR20/result_val.pkl',
                         help='output result file in pickle format')
-    parser.add_argument('--weibull', default='/home/xuma/mmdet/weibull_model.pkl.pkl',
+    parser.add_argument('--weibull', default='/home/xuma/mmdet/weibull_model.pkl',
                         help='output result file in pickle format')
     parser.add_argument(
         '--fuse-conv-bn',
