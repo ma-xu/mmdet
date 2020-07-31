@@ -73,7 +73,7 @@ def main():
             score = mmcv.load(args.score_path+str(catid)+'.pkl')
         else:
             score=[]
-        centroid = centroids[catid]
+        centroid = [centroids[catid].tolist()]
         dist = calc_distance(centroid,score)
         print(dist)
 
