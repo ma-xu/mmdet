@@ -109,6 +109,12 @@ def main():
     dataset = build_dataset(cfg.data.test)
 
     outputs = mmcv.load(args.out)
+
+    for image in outputs:
+        bboxes, segs, feas = image
+
+
+
     print("Output loaded!!")
 
     rank, _ = get_dist_info()
