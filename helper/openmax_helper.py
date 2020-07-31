@@ -75,18 +75,18 @@ def main():
             score = mmcv.load(args.score_path+str(catid)+'.pkl')
             score = [[s] for s in score]
         else:
-            score=[]
+            score=[[[0] * len(dataset.CLASSES)]]
         if len(score)>50000:
             score = score[0:50000]
         try:
             centroid = [centroids[catid].tolist()]
         except:
-            centroid= []
+            centroid= [[0] * len(dataset.CLASSES)]
         dist = compute_channel_distances(centroid,score)
         # print("Finish calculating dist for class {}.".format(catid))
         dists.append(dist)
         mavs.append(centroid)
-
+        mavs = np.array(mavs)
     weibull_model = fit_weibull(mavs,dists, dataset.CLASSES,200,'euclidean')
 
 
