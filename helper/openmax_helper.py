@@ -75,7 +75,7 @@ def main():
         else:
             score=[]
         centroid = [centroids[catid].tolist()]
-        dist = calc_distance(centroid,score)
+        dist = compute_channel_distances(centroid,score)
         print(dist)
 
 

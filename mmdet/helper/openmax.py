@@ -3,6 +3,24 @@ import scipy.spatial.distance as spd
 
 import libmr
 
+def compute_channel_distances(mavs, features, eu_weight=0.5):
+    """
+    Input:
+        mavs (channel, C)
+        features: (N, channel, C)
+    Output:
+        channel_distances: dict of distance distribution from MAV for each channel.
+    """
+    eucos_dists, eu_dists, cos_dists = [], [], []
+    for channel, mcv in enumerate(mavs):  # Compute channel specific distances
+        eu_dists.append([spd.euclidean(mcv, feat[channel]) for feat in features])
+        cos_dists.append([spd.cosine(mcv, feat[channel]) for feat in features])
+        eucos_dists.append([spd.euclidean(mcv, feat[channel]) * eu_weight +
+                            spd.cosine(mcv, feat[channel]) for feat in features])
+
+    return {'eucos': np.array(eucos_dists), 'cosine': np.array(cos_dists), 'euclidean': np.array(eu_dists)}
+
+
 
 def calc_distance(query_score, mcv, eu_weight, distance_type='eucos'):
     if distance_type == 'eucos':
