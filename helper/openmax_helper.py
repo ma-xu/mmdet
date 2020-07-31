@@ -14,12 +14,14 @@ from mmdet.datasets import build_dataloader, build_dataset
 from mmdet.models import build_detector
 from mmdet.datasets.coco import CocoDataset
 import warnings
+from mmdet.helper.openmax import *
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Openmax Helper')
     parser.add_argument('config', help='test config file path')
-    parser.add_argument('out', default='', help='test config file path')
+    parser.add_argument('centroids', default='/home/xuma/mmdet/centroids.pkl', help='centroids path')
+    parser.add_argument('score_path', default='/home/xuma/mmdet/scores_', help='score path')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -53,25 +55,31 @@ def main():
     # TODO: support multiple images per gpu (only minor changes are needed)
     dataset = build_dataset(cfg.data.test)
 
-    outputs = mmcv.load(args.out)
-    print("Output loaded!!")
 
-    rank, _ = get_dist_info()
-    if rank == 0:
-        kwargs = {} if args.options is None else args.options
-        if args.format_only:
-            dataset.format_results(outputs, **kwargs)
-        if args.eval:
-            # result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/work_dirs/json/result_train')
-            # print("format files dones!!!")
-            #
-            # print(result_files)
-            # print(tmp_dir)
-            # dataset.evaluate(outputs, args.eval, **kwargs)
-            result_files = {'bbox': '/home/xuma/mmdet/result_train.bbox.json',
-                            'proposal': '/home/xuma/mmdet/result_train.bbox.json',
-                            'segm': '/home/xuma/mmdet/work_dirs/json/result_train'}
-            dataset.evaluate2(result_files, args.eval, **kwargs)
+
+
+    centroids = mmcv.load(args.centroids)
+    print("Centroids loaded!!")
+
+    for i in range(0,len(dataset.CLASSES)):
+        catid = i+1
+        if os.path.exists(args.score_path+str(catid)+'.pkl'):
+            score = mmcv.load(args.score_path+str(catid)+'.pkl')
+        else:
+            score=[]
+        centroid = centroids[catid]
+        dist = calc_distance(centroid,score)
+        print(dist)
+
+
+
+
+
+    # rank, _ = get_dist_info()
+    # if rank == 0:
+    #     kwargs = {} if args.options is None else args.options
+    #
+
 
 
 if __name__ == '__main__':
