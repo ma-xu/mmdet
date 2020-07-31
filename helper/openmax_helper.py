@@ -71,6 +71,7 @@ def main():
         catid = i+1
         if os.path.exists(args.score_path+str(catid)+'.pkl'):
             score = mmcv.load(args.score_path+str(catid)+'.pkl')
+            score = [[s] for s in score]
         else:
             score=[]
         centroid = [centroids[catid].tolist()]
