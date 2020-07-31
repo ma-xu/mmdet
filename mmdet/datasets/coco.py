@@ -315,7 +315,7 @@ class CocoDataset(CustomDataset):
             print("Start dump bbox json.")
             mmcv.dump(json_results[0], result_files['bbox'])
             print("Start dump segm json.")
-            if len(json_results[0])<=100000:
+            if len(json_results[0])<=5000000:
                 mmcv.dump(json_results[1], result_files['segm'])
             else:
                 print("Split segm into {} parts, each includes 10000 images".format(len(json_results[0])//100000))
