@@ -14,6 +14,8 @@ def features2result(features, labels, num_classes):
     Returns:
         list(ndarray): bbox results of each class
     """
+    print(features.shape)
+    print(labels.shape)
     if features.shape[0] == 0:
         return [np.zeros((0, num_classes), dtype=np.float32) for i in range(num_classes)]
     else:

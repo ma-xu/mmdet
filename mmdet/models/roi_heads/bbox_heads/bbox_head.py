@@ -198,9 +198,6 @@ class BBoxHead(nn.Module):
             cls_score = sum(cls_score) / float(len(cls_score))
 
         scores = F.softmax(cls_score, dim=1) if cls_score is not None else None
-        print(type(scores))
-        print(scores.shape)
-        print(scores)
 
         if bbox_pred is not None:
             bboxes = self.bbox_coder.decode(
