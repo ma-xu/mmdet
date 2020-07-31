@@ -74,6 +74,8 @@ def main():
             score = [[s] for s in score]
         else:
             score=[]
+        if len(score)>50000:
+            score = score[0:50000]
         centroid = [centroids[catid].tolist()]
         dist = compute_channel_distances(centroid,score)
         print(dist)
