@@ -86,7 +86,7 @@ def main():
         # print("Finish calculating dist for class {}.".format(catid))
         dists.append(dist)
         mavs.append(centroid)
-        mavs = np.array(mavs)
+    mavs = np.array(mavs)
     weibull_model = fit_weibull(mavs,dists, dataset.CLASSES,200,'euclidean')
 
 
