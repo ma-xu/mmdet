@@ -150,6 +150,9 @@ class BaseDetector(nn.Module, metaclass=ABCMeta):
             # proposals.
             if 'proposals' in kwargs:
                 kwargs['proposals'] = kwargs['proposals'][0]
+            a,b,c = self.simple_test(imgs[0], img_metas[0], **kwargs)
+            print(b)
+            print(c.shape)
             return self.simple_test(imgs[0], img_metas[0], **kwargs)
         else:
             # TODO: support test augmentation for predefined proposals
