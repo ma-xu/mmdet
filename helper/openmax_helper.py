@@ -15,6 +15,7 @@ from mmdet.models import build_detector
 from mmdet.datasets.coco import CocoDataset
 import warnings
 from mmdet.helper.openmax import *
+import pickle
 
 
 def parse_args():
@@ -89,7 +90,9 @@ def main():
     mavs = np.array(mavs)
     weibull_model = fit_weibull(mavs,dists, dataset.CLASSES,200,'euclidean')
 
-
+    filehandler = open('weibull_model.pkl', 'wb')
+    pickle.dump(weibull_model, filehandler)
+    print("weibull model has been saved.")
 
 
     # rank, _ = get_dist_info()
