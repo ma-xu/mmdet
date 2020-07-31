@@ -78,7 +78,8 @@ def main():
             score = score[0:50000]
         centroid = [centroids[catid].tolist()]
         dist = compute_channel_distances(centroid,score)
-        print(dist)
+        print("Finish calculating dist for class {}.".format(catid))
+
 
 
 
