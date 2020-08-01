@@ -14,8 +14,8 @@ from pycocotools import mask as COCOmask
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluation demo')
-    parser.add_argument('--known_num', default=20)
-    parser.add_argument('--ann_dir', default='C:\\Users\\xuma\Downloads')
+    parser.add_argument('--known_num', default=40)
+    parser.add_argument('--ann_dir', default='/Users/melody/Downloads/annotations')
 
 
     args = parser.parse_args()
@@ -63,7 +63,7 @@ def convert(args):
             'images': images,
             'annotations': annotations_OSR
         }
-        with open(os.path.join(args.ann_dir,'instances_train2017_OSR.json'), 'w') as f:
+        with open(os.path.join(args.ann_dir,'instances_train2017_OSR'+str(args.known_num)+'.json'), 'w') as f:
             json.dump(data_out, f)
 
     if Validation_parser:
@@ -100,7 +100,7 @@ def convert(args):
             'images': images,
             'annotations': annotations_OSR
         }
-        with open(os.path.join(args.ann_dir,'instances_val2017_OSR.json'), 'w') as f:
+        with open(os.path.join(args.ann_dir,'instances_val2017_OSR'+str(args.known_num)+'.json'), 'w') as f:
             json.dump(data_out, f)
 
 
