@@ -21,8 +21,9 @@ import pickle
 def parse_args():
     parser = argparse.ArgumentParser(description='Openmax Helper')
     parser.add_argument('config', help='test config file path')
-    parser.add_argument('--centroids', default='/home/xuma/mmdet/centroids.pkl', help='centroids path')
-    parser.add_argument('--score_path', default='/home/xuma/mmdet/scores_', help='score path')
+    parser.add_argument('--centroids', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/centroids.pkl', help='centroids path')
+    parser.add_argument('--score_path', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/scores_', help='score path')
+    parser.add_argument('--save_path', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/', help='score path')
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument(
         '--launcher',
@@ -90,7 +91,7 @@ def main():
     mavs = np.array(mavs)
     weibull_model = fit_weibull(mavs,dists, dataset.CLASSES,200,'euclidean')
 
-    filehandler = open('weibull_model.pkl', 'wb')
+    filehandler = open(args.save_path+'weibull_model.pkl', 'wb')
     pickle.dump(weibull_model, filehandler)
     print("weibull model has been saved.")
 
