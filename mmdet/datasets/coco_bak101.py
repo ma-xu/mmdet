@@ -21,32 +21,20 @@ from .custom import CustomDataset
 @DATASETS.register_module()
 class CocoDataset(CustomDataset):
 
-    # CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
-    #            'train', 'truck', 'boat', 'traffic light', 'fire hydrant',
-    #            'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog',
-    #            'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe',
-    #            'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
-    #            'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat',
-    #            'baseball glove', 'skateboard', 'surfboard', 'tennis racket',
-    #            'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl',
-    #            'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot',
-    #            'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
-    #            'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop',
-    #            'mouse', 'remote', 'keyboard', 'cell phone', 'microwave',
-    #            'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock',
-    #            'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush')
-
-    # The random selected 50 classes.
-    # CLASSES = ('spoon', 'motorcycle', 'skis', 'bowl', 'clock', 'handbag', 'sports ball', 'bus',
-    #            'handbag', 'banana', 'backpack', 'toilet', 'orange', 'dog', 'fire hydrant',
-    #            'toilet', 'fire hydrant', 'parking meter', 'toilet', 'person', 'spoon',
-    #            'teddy bear', 'train', 'sports ball', 'couch', 'person', 'bird', 'spoon',
-    #            'knife', 'sandwich', 'cake', 'suitcase', 'traffic light', 'backpack', 'cat',
-    #            'teddy bear', 'elephant', 'sandwich', 'bear', 'cake', 'baseball bat', 'tv',
-    #            'zebra', 'suitcase', 'horse', 'couch', 'microwave', 'keyboard', 'toaster',
-    #            'bed', 'vase', 'boat', 'banana', 'bus', 'truck', 'handbag', 'fork', 'oven', 'boat',
-    #            'kite', 'banana', 'carrot', 'hair drier', 'person', 'bird', 'sheep', 'spoon', 'dining table',
-    #            'toothbrush', 'cow', 'knife', 'bicycle', 'motorcycle', 'frisbee', 'keyboard')
+    CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
+               'train', 'truck', 'boat', 'traffic light', 'fire hydrant',
+               'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog',
+               'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe',
+               'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
+               'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat',
+               'baseball glove', 'skateboard', 'surfboard', 'tennis racket',
+               'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl',
+               'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot',
+               'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
+               'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop',
+               'mouse', 'remote', 'keyboard', 'cell phone', 'microwave',
+               'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock',
+               'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush')
 
     def load_annotations(self, ann_file):
         """Load annotation from COCO style annotation file.
@@ -59,14 +47,7 @@ class CocoDataset(CustomDataset):
         """
 
         self.coco = COCO(ann_file)
-        # self.cat_ids = self.coco.get_cat_ids(cat_names=self.CLASSES)
-        self.cat_ids = list(range(1,50+1))
-
-        # print("____________running load_annotations____________")
-        # print("________start: cat_ids_____________")
-        # print(self.cat_ids)
-        # print("________end  : cat_ids_____________")
-
+        self.cat_ids = self.coco.get_cat_ids(cat_names=self.CLASSES)
         self.cat2label = {cat_id: i for i, cat_id in enumerate(self.cat_ids)}
         self.img_ids = self.coco.get_img_ids()
         data_infos = []
@@ -150,8 +131,8 @@ class CocoDataset(CustomDataset):
             with_mask (bool): Whether to parse mask annotations.
 
         Returns:
-            dict: A dict containing the following keys: bboxes, bboxes_ignore,\
-                labels, masks, seg_map. "masks" are raw annotations and not \
+            dict: A dict containing the following keys: bboxes, bboxes_ignore,
+                labels, masks, seg_map. "masks" are raw annotations and not
                 decoded into binary masks.
         """
         gt_bboxes = []
@@ -255,7 +236,7 @@ class CocoDataset(CustomDataset):
 
     def _segm2json(self, results):
         """Convert instance segmentation results to COCO json style."""
-        score_threshold = 0.0
+        score_threshold=0.0
         bbox_json_results = []
         segm_json_results = []
         for idx in range(len(self)):
@@ -271,10 +252,10 @@ class CocoDataset(CustomDataset):
                     data['bbox'] = self.xyxy2xywh(bboxes[i])
                     data['score'] = float(bboxes[i][4])
                     data['feature'] = features[i].tolist()
-                    if data['score'] > score_threshold:
+                    if data['score']>score_threshold:
                         data['category_id'] = self.cat_ids[label]
                     else:
-                        data['category_id'] = 51
+                        data['category_id'] = 21
                     bbox_json_results.append(data)
 
                 # segm results
@@ -291,10 +272,10 @@ class CocoDataset(CustomDataset):
                     data['bbox'] = self.xyxy2xywh(bboxes[i])
                     data['score'] = float(mask_score[i])
                     data['feature'] = features[i].tolist()
-                    if data['score'] > score_threshold:
+                    if data['score']>score_threshold:
                         data['category_id'] = self.cat_ids[label]
                     else:
-                        data['category_id'] = 51
+                        data['category_id'] = 21
                     if isinstance(segms[i]['counts'], bytes):
                         segms[i]['counts'] = segms[i]['counts'].decode()
                     data['segmentation'] = segms[i]
@@ -317,7 +298,7 @@ class CocoDataset(CustomDataset):
                 "somepath/xxx.proposal.json".
 
         Returns:
-            dict[str: str]: Possible keys are "bbox", "segm", "proposal", and \
+            dict[str: str]: Possible keys are "bbox", "segm", "proposal", and
                 values are corresponding filenames.
         """
         result_files = dict()
@@ -333,18 +314,18 @@ class CocoDataset(CustomDataset):
             result_files['segm'] = f'{outfile_prefix}.segm.json'
             print("Start dump bbox json.")
             mmcv.dump(json_results[0], result_files['bbox'])
-            # mmcv.dump(json_results[1], result_files['segm'])
             print("Start dump segm json.")
-            if len(json_results[0]) <= 5000000:
+            if len(json_results[0])<=5000000:
                 mmcv.dump(json_results[1], result_files['segm'])
             else:
-                print("Split segm into {} parts, each includes 10000 images".format(len(json_results[0]) // 100000))
-                for i in range(0, len(json_results[0]) // 100000):
+                print("Split segm into {} parts, each includes 10000 images".format(len(json_results[0])//100000))
+                for i in range(0,len(json_results[0])//100000):
                     print("Start dump segm {} json.".format(i))
-                    mmcv.dump(json_results[1][i * 100000:(i + 1) * 100000], f'{outfile_prefix}.segm{i}.json')
-                if len(json_results[0]) > (i + 1) * 100000:
+                    mmcv.dump(json_results[1][i*100000:(i+1)*100000], f'{outfile_prefix}.segm{i}.json')
+                if len(json_results[0])>(i+1)*100000:
                     print("Start dump segm last json.")
-                    mmcv.dump(json_results[1][(i + 1) * 100000:], f'{outfile_prefix}.segm{i + 1}.json')
+                    mmcv.dump(json_results[1][(i + 1) * 100000:], f'{outfile_prefix}.segm{i+1}.json')
+
             print("Finish dumping files")
         elif isinstance(results[0], np.ndarray):
             json_results = self._proposal2json(results)
@@ -389,8 +370,8 @@ class CocoDataset(CustomDataset):
                 If not specified, a temp file will be created. Default: None.
 
         Returns:
-            tuple: (result_files, tmp_dir), result_files is a dict containing \
-                the json filepaths, tmp_dir is the temporal directory created \
+            tuple: (result_files, tmp_dir), result_files is a dict containing
+                the json filepaths, tmp_dir is the temporal directory created
                 for saving json files when jsonfile_prefix is not specified.
         """
         assert isinstance(results, list), 'results must be a list'
@@ -405,7 +386,6 @@ class CocoDataset(CustomDataset):
             tmp_dir = None
         result_files = self.results2json(results, jsonfile_prefix)
         return result_files, tmp_dir
-
 
 
     def accumulate(self,cocoEval, p=None):
@@ -659,7 +639,6 @@ class CocoDataset(CustomDataset):
         cocoEval.stats = summarize()
 
 
-
     def evaluate(self,
                  results,
                  metric='bbox',
@@ -691,13 +670,14 @@ class CocoDataset(CustomDataset):
             dict[str, float]: COCO style evaluation metric.
         """
 
+
         metrics = metric if isinstance(metric, list) else [metric]
         allowed_metrics = ['bbox', 'segm', 'proposal', 'proposal_fast']
         for metric in metrics:
             if metric not in allowed_metrics:
                 raise KeyError(f'metric {metric} is not supported')
-
         result_files, tmp_dir = self.format_results(results, jsonfile_prefix)
+
 
         eval_results = {}
         cocoGt = self.coco
@@ -728,7 +708,6 @@ class CocoDataset(CustomDataset):
                     logger=logger,
                     level=logging.ERROR)
                 break
-
             iou_type = 'bbox' if metric == 'proposal' else metric
             cocoEval = COCOeval(cocoGt, cocoDt, iou_type)
             cocoEval.params.catIds = self.cat_ids
@@ -747,9 +726,274 @@ class CocoDataset(CustomDataset):
                     val = float(f'{cocoEval.stats[i + 6]:.3f}')
                     eval_results[item] = val
             else:
+
+                cocoEval.evaluate()
+
+                # ############calculate centroids ######################
+                # cocoevalhelper.computeCentroids(cocoEval)
+
+                # cocoEval.accumulate()
+                self.accumulate(cocoEval)
+                self.summarize(cocoEval)
+                if classwise:  # Compute per-category AP
+                    # Compute per-category AP
+                    # from https://github.com/facebookresearch/detectron2/
+                    precisions = cocoEval.eval['precision']
+                    # precision: (iou, recall, cls, area range, max dets)
+                    assert len(self.cat_ids) == precisions.shape[2]
+
+                    results_per_category = []
+                    for idx, catId in enumerate(self.cat_ids):
+                        # area range index 0: all area ranges
+                        # max dets index -1: typically 100 per image
+                        nm = self.coco.loadCats(catId)[0]
+                        precision = precisions[:, :, idx, 0, -1]
+                        precision = precision[precision > -1]
+                        if precision.size:
+                            ap = np.mean(precision)
+                        else:
+                            ap = float('nan')
+                        results_per_category.append(
+                            (f'{nm["name"]}', f'{float(ap):0.3f}'))
+
+                    num_columns = min(6, len(results_per_category) * 2)
+                    results_flatten = list(
+                        itertools.chain(*results_per_category))
+                    headers = ['category', 'AP'] * (num_columns // 2)
+                    results_2d = itertools.zip_longest(*[
+                        results_flatten[i::num_columns]
+                        for i in range(num_columns)
+                    ])
+                    table_data = [headers]
+                    table_data += [result for result in results_2d]
+                    table = AsciiTable(table_data)
+                    print_log('\n' + table.table, logger=logger)
+
+                metric_items = [
+                    'mAP', 'mAP_50', 'mAP_75', 'mAP_s', 'mAP_m', 'mAP_l'
+                ]
+                for i in range(len(metric_items)):
+                    key = f'{metric}_{metric_items[i]}'
+                    val = float(f'{cocoEval.stats[i]:.3f}')
+                    eval_results[key] = val
+                ap = cocoEval.stats[:6]
+                eval_results[f'{metric}_mAP_copypaste'] = (
+                    f'{ap[0]:.3f} {ap[1]:.3f} {ap[2]:.3f} {ap[3]:.3f} '
+                    f'{ap[4]:.3f} {ap[5]:.3f}')
+        if tmp_dir is not None:
+            tmp_dir.cleanup()
+        return eval_results
+
+
+    def evaluate2(self,
+                 result_files,
+                 metric='bbox',
+                 logger=None,
+                 jsonfile_prefix=None,
+                 classwise=False,
+                 proposal_nums=(100, 300, 1000),
+                 iou_thrs=np.arange(0.5, 0.96, 0.05)):
+
+        metrics = metric if isinstance(metric, list) else [metric]
+        allowed_metrics = ['bbox', 'segm', 'proposal', 'proposal_fast']
+        for metric in metrics:
+            if metric not in allowed_metrics:
+                raise KeyError(f'metric {metric} is not supported')
+
+
+        eval_results = {}
+        cocoGt = self.coco
+        for metric in metrics:
+            msg = f'Evaluating {metric}...'
+            if logger is None:
+                msg = '\n' + msg
+            print_log(msg, logger=logger)
+
+            if metric not in result_files:
+                raise KeyError(f'{metric} is not in results')
+            try:
+                # cocoDt = cocoGt.loadRes(result_files[metric])
+                from mmdet.helper.helpers import loadRes
+                cocoDt = loadRes(cocoGt, result_files[metric])
+            except IndexError:
+                print_log(
+                    'The testing results of the whole dataset is empty.',
+                    logger=logger,
+                    level=logging.ERROR)
+                break
+            iou_type = 'bbox' if metric == 'proposal' else metric
+            cocoEval = COCOeval(cocoGt, cocoDt, iou_type)
+            cocoEval.params.catIds = self.cat_ids
+            cocoEval.params.imgIds = self.img_ids
+            if metric == 'proposal':
+                cocoEval.params.useCats = 0
+                cocoEval.params.maxDets = list(proposal_nums)
                 cocoEval.evaluate()
                 cocoEval.accumulate()
                 cocoEval.summarize()
+                metric_items = [
+                    'AR@100', 'AR@300', 'AR@1000', 'AR_s@1000', 'AR_m@1000',
+                    'AR_l@1000'
+                ]
+                for i, item in enumerate(metric_items):
+                    val = float(f'{cocoEval.stats[i + 6]:.3f}')
+                    eval_results[item] = val
+            else:
+
+                # cocoEval.evaluate()
+                cocoevalhelper.evaluate(cocoEval)
+
+                ############calculate centroids ######################
+                cocoevalhelper.computeCentroids(cocoEval)
+
+                # cocoEval.accumulate()
+                self.accumulate(cocoEval)
+                self.summarize(cocoEval)
+                if classwise:  # Compute per-category AP
+                    # Compute per-category AP
+                    # from https://github.com/facebookresearch/detectron2/
+                    precisions = cocoEval.eval['precision']
+                    # precision: (iou, recall, cls, area range, max dets)
+                    assert len(self.cat_ids) == precisions.shape[2]
+
+                    results_per_category = []
+                    for idx, catId in enumerate(self.cat_ids):
+                        # area range index 0: all area ranges
+                        # max dets index -1: typically 100 per image
+                        nm = self.coco.loadCats(catId)[0]
+                        precision = precisions[:, :, idx, 0, -1]
+                        precision = precision[precision > -1]
+                        if precision.size:
+                            ap = np.mean(precision)
+                        else:
+                            ap = float('nan')
+                        results_per_category.append(
+                            (f'{nm["name"]}', f'{float(ap):0.3f}'))
+
+                    num_columns = min(6, len(results_per_category) * 2)
+                    results_flatten = list(
+                        itertools.chain(*results_per_category))
+                    headers = ['category', 'AP'] * (num_columns // 2)
+                    results_2d = itertools.zip_longest(*[
+                        results_flatten[i::num_columns]
+                        for i in range(num_columns)
+                    ])
+                    table_data = [headers]
+                    table_data += [result for result in results_2d]
+                    table = AsciiTable(table_data)
+                    print_log('\n' + table.table, logger=logger)
+
+                metric_items = [
+                    'mAP', 'mAP_50', 'mAP_75', 'mAP_s', 'mAP_m', 'mAP_l'
+                ]
+                for i in range(len(metric_items)):
+                    key = f'{metric}_{metric_items[i]}'
+                    val = float(f'{cocoEval.stats[i]:.3f}')
+                    eval_results[key] = val
+                ap = cocoEval.stats[:6]
+                eval_results[f'{metric}_mAP_copypaste'] = (
+                    f'{ap[0]:.3f} {ap[1]:.3f} {ap[2]:.3f} {ap[3]:.3f} '
+                    f'{ap[4]:.3f} {ap[5]:.3f}')
+
+        return eval_results
+
+
+    def evaluate3(self,
+                 results,
+                 metric='bbox',
+                 logger=None,
+                 jsonfile_prefix=None,
+                 classwise=False,
+                 proposal_nums=(100, 300, 1000),
+                 iou_thrs=np.arange(0.5, 0.96, 0.05)):
+        """Evaluation in COCO protocol.
+
+        Args:
+            results (list[list | tuple]): Testing results of the dataset.
+            metric (str | list[str]): Metrics to be evaluated. Options are
+                'bbox', 'segm', 'proposal', 'proposal_fast'.
+            logger (logging.Logger | str | None): Logger used for printing
+                related information during evaluation. Default: None.
+            jsonfile_prefix (str | None): The prefix of json files. It includes
+                the file path and the prefix of filename, e.g., "a/b/prefix".
+                If not specified, a temp file will be created. Default: None.
+            classwise (bool): Whether to evaluating the AP for each class.
+            proposal_nums (Sequence[int]): Proposal number used for evaluating
+                recalls, such as recall@100, recall@1000.
+                Default: (100, 300, 1000).
+            iou_thrs (Sequence[float]): IoU threshold used for evaluating
+                recalls. If set to a list, the average recall of all IoUs will
+                also be computed. Default: 0.5.
+
+        Returns:
+            dict[str, float]: COCO style evaluation metric.
+        """
+
+
+        metrics = metric if isinstance(metric, list) else [metric]
+        allowed_metrics = ['bbox', 'segm', 'proposal', 'proposal_fast']
+        for metric in metrics:
+            if metric not in allowed_metrics:
+                raise KeyError(f'metric {metric} is not supported')
+        result_files, tmp_dir = self.format_results(results, jsonfile_prefix)
+
+
+        eval_results = {}
+        cocoGt = self.coco
+        for metric in metrics:
+            msg = f'Evaluating {metric}...'
+            if logger is None:
+                msg = '\n' + msg
+            print_log(msg, logger=logger)
+
+            if metric == 'proposal_fast':
+                ar = self.fast_eval_recall(
+                    results, proposal_nums, iou_thrs, logger='silent')
+                log_msg = []
+                for i, num in enumerate(proposal_nums):
+                    eval_results[f'AR@{num}'] = ar[i]
+                    log_msg.append(f'\nAR@{num}\t{ar[i]:.4f}')
+                log_msg = ''.join(log_msg)
+                print_log(log_msg, logger=logger)
+                continue
+
+            if metric not in result_files:
+                raise KeyError(f'{metric} is not in results')
+            try:
+                cocoDt = cocoGt.loadRes(result_files[metric])
+            except IndexError:
+                print_log(
+                    'The testing results of the whole dataset is empty.',
+                    logger=logger,
+                    level=logging.ERROR)
+                break
+            iou_type = 'bbox' if metric == 'proposal' else metric
+            cocoEval = COCOeval(cocoGt, cocoDt, iou_type)
+            cocoEval.params.catIds = self.cat_ids
+            cocoEval.params.imgIds = self.img_ids
+            if metric == 'proposal':
+                cocoEval.params.useCats = 0
+                cocoEval.params.maxDets = list(proposal_nums)
+                cocoEval.evaluate()
+                cocoEval.accumulate()
+                cocoEval.summarize()
+                metric_items = [
+                    'AR@100', 'AR@300', 'AR@1000', 'AR_s@1000', 'AR_m@1000',
+                    'AR_l@1000'
+                ]
+                for i, item in enumerate(metric_items):
+                    val = float(f'{cocoEval.stats[i + 6]:.3f}')
+                    eval_results[item] = val
+            else:
+
+                cocoEval.evaluate()
+
+                # ############calculate centroids ######################
+                # cocoevalhelper.computeCentroids(cocoEval)
+
+                # cocoEval.accumulate()
+                self.accumulate(cocoEval)
+                self.summarize(cocoEval)
                 if classwise:  # Compute per-category AP
                     # Compute per-category AP
                     # from https://github.com/facebookresearch/detectron2/
