@@ -25,6 +25,7 @@ def parse_args():
     parser.add_argument('--score_path', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/scores_', help='score path')
     parser.add_argument('--save_path', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/', help='score path')
     parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--knownclass', type=int, default=50)
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'slurm', 'mpi'],
@@ -71,7 +72,7 @@ def main():
 
     dists=[]
     mavs = []
-    for i in range(0,len(dataset.CLASSES)):
+    for i in range(0,args.knownclass):
         catid = i+1
         if os.path.exists(args.score_path+str(catid)+'.pkl'):
             score = mmcv.load(args.score_path+str(catid)+'.pkl')
