@@ -26,15 +26,19 @@ def loadRes(coco, resFile):
     tic = time.time()
     if type(resFile) == str:
         anns= [ ]
-        for i in range(0,1000000):
-            filepath = resFile+'.segm'+str(i)+'.json'
-            if os.path.exists(filepath):
-                print("loading {}".format(filepath))
-                anns_sub = json.load(open(filepath))
-                anns.extend(anns_sub)
-            else:
-                print("Finish load all segm json files")
-                break
+        try:
+            filepath = resFile + '.segm'  + '.json'
+            anns = json.load(open(filepath))
+        except:
+            for i in range(0,1000000):
+                filepath = resFile+'.segm'+str(i)+'.json'
+                if os.path.exists(filepath):
+                    print("loading {}".format(filepath))
+                    anns_sub = json.load(open(filepath))
+                    anns.extend(anns_sub)
+                else:
+                    print("Finish load all segm json files")
+                    break
     elif type(resFile) == np.ndarray:
         anns = coco.loadNumpyAnnotations(resFile)
     else:
