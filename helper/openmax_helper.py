@@ -90,7 +90,7 @@ def main():
         dists.append(dist)
         mavs.append(centroid)
     mavs = np.array(mavs)
-    weibull_model = fit_weibull(mavs,dists, dataset.CLASSES,200,'euclidean')
+    weibull_model = fit_weibull(mavs,dists, list(range(1, args.knownclass+1)),200,'euclidean')
 
     filehandler = open(args.save_path+'weibull_model.pkl', 'wb')
     pickle.dump(weibull_model, filehandler)
