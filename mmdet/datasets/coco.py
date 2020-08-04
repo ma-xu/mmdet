@@ -332,7 +332,7 @@ class CocoDataset(CustomDataset):
             result_files['proposal'] = f'{outfile_prefix}.bbox.json'
             result_files['segm'] = f'{outfile_prefix}.segm.json'
             # print("Start dump bbox json.")
-            # mmcv.dump(json_results[0], result_files['bbox'])
+            mmcv.dump(json_results[0], result_files['bbox'])
             # mmcv.dump(json_results[1], result_files['segm'])
             print("Start dump segm json.")
             if len(json_results[0]) <= 5000000:
