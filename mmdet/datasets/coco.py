@@ -858,7 +858,7 @@ class CocoDataset(CustomDataset):
 
                 ############calculate centroids ######################
                 print("start calculate centroids.")
-                cocoevalhelper.computeCentroids(cocoEval)
+                cocoevalhelper.computeCentroids(cocoEval,save_dir='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/')
 
                 # cocoEval.accumulate()
                 self.accumulate(cocoEval)

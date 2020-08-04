@@ -125,7 +125,9 @@ def computeIoUhelper(cocoeval, imgId, catId):
     ious = maskUtils.iou(d, g, iscrowd)
     return ious
 
-def computeCentroids(cocoeval, iou_thr=0.75, save_path='centroids.pkl'):
+def computeCentroids(cocoeval, iou_thr=0.75,save_dir='', save_path='centroids.pkl'):
+
+    save_path = save_dir+save_path
     p = cocoeval.params
     p.imgIds = list(np.unique(p.imgIds))
     if p.useCats:
@@ -175,7 +177,7 @@ def computeCentroids(cocoeval, iou_thr=0.75, save_path='centroids.pkl'):
 
     for catId in catIds:
         if len(centroids[catId])>0:
-            filehandler = open('scores_'+str(catId)+'.pkl', 'wb')
+            filehandler = open(save_dir+'scores_'+str(catId)+'.pkl', 'wb')
             pickle.dump(centroids[catId], filehandler)
             print("Scores of class {} have been saved to: {}".format(catId,save_path))
             centroids[catId] = np.sum(centroids[catId],axis=0)/len(centroids[catId])
