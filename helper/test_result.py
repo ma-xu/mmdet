@@ -117,15 +117,16 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            # result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/work_dirs/json/result_train')
-            # print("format files dones!!!")
+            result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_train')
+            print("format files dones!!!")
+            return 0
             #
             # print(result_files)
             # print(tmp_dir)
             # dataset.evaluate(outputs, args.eval, **kwargs)
-            result_files = {'bbox': '/home/xuma/mmdet/result_train.bbox.json',
-                            'proposal': '/home/xuma/mmdet/result_train.bbox.json',
-                            'segm': '/home/xuma/mmdet/work_dirs/json/result_train'}
+            result_files = {'bbox': '/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_train.bbox.json',
+                            'proposal': '/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_train.bbox.json',
+                            'segm': '/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_train'}
             dataset.evaluate2(result_files, args.eval, **kwargs)
 
 
