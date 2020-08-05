@@ -29,6 +29,7 @@ def parse_args():
                         help='output result file in pickle format')
     parser.add_argument('--threshold',type=float,default=0.1, help='score threshold for known classes')
     parser.add_argument('--knownclass', type=int, default=50, help="the number of known classes")
+    parser.add_argument('--alpha', type=int, default=10, help="parameter alpha for openmax")
     parser.add_argument(
         '--fuse-conv-bn',
         action='store_true',
@@ -130,7 +131,7 @@ def main():
             if len(feas[i])>0:
                 for j in range(0,len(feas[i])):
                     roi_cat_fea = np.expand_dims(feas[i][j], axis=0)
-                    so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
+                    so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, args.alpha, "euclidean")
                     predicted_label_index = np.argmax(so) if np.max(so) >= args.threshold else args.knownclass
                     new_feas[predicted_label_index].append(feas[i][j])
                     new_segs[predicted_label_index].append(segs[i][j])
