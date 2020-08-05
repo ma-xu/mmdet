@@ -123,8 +123,7 @@ def main():
         bboxes, segs, feas = image
         for cat_fea in feas:
             if len(cat_fea)>0:
-
-                so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
+                so, _ = openmax(weibull_model, known_classes, cat_fea, 0.5, 3, "euclidean")
                 print(so)
 
 
