@@ -124,7 +124,7 @@ def main():
         for cat_fea in feas:
             if len(cat_fea)>0:
                 for roi_cat_fea in cat_fea:
-                    roi_cat_fea = np.np.expand_dims(roi_cat_fea, axis=0)
+                    roi_cat_fea = np.expand_dims(roi_cat_fea, axis=0)
                     so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
                     print(so)
 
