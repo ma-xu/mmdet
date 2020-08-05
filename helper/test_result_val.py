@@ -119,6 +119,17 @@ def main():
     new_out= []
     for image in outputs:
         bboxes, segs, feas = image
+        for fea in feas:
+            for cat_fea in fea:
+                if len(cat_fea)>0:
+                    for roi_cat_fea in cat_fea:
+                        so, _ = openmax(weibull_model, dataset.CLASSES, feas, 0.5, 3, "euclidean")
+                        print(so)
+
+
+
+
+
         so, _ = openmax(weibull_model, dataset.CLASSES, feas, 0.5, 3, "euclidean")
         seg = np.argsort(segs, so)
         bbox = np.argsort(bboxes,so)
