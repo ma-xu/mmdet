@@ -999,41 +999,8 @@ class CocoDataset(CustomDataset):
 
             # cocoEval.accumulate()
             self.accumulate(cocoEval)
-            self.summarize(cocoEval)
-            if classwise:  # Compute per-category AP
-                # Compute per-category AP
-                # from https://github.com/facebookresearch/detectron2/
-                precisions = cocoEval.eval['precision']
-                # precision: (iou, recall, cls, area range, max dets)
-                assert len(self.cat_ids) == precisions.shape[2]
-
-                results_per_category = []
-                for idx, catId in enumerate(self.cat_ids):
-                    # area range index 0: all area ranges
-                    # max dets index -1: typically 100 per image
-                    nm = self.coco.loadCats(catId)[0]
-                    precision = precisions[:, :, idx, 0, -1]
-                    precision = precision[precision > -1]
-                    if precision.size:
-                        ap = np.mean(precision)
-                    else:
-                        ap = float('nan')
-                    results_per_category.append(
-                        (f'{nm["name"]}', f'{float(ap):0.3f}'))
-
-                num_columns = min(6, len(results_per_category) * 2)
-                results_flatten = list(
-                    itertools.chain(*results_per_category))
-                headers = ['category', 'AP'] * (num_columns // 2)
-                results_2d = itertools.zip_longest(*[
-                    results_flatten[i::num_columns]
-                    for i in range(num_columns)
-                ])
-                table_data = [headers]
-                table_data += [result for result in results_2d]
-                table = AsciiTable(table_data)
-                print_log('\n' + table.table, logger=logger)
-
+            cocoevalhelper.opensummarize(cocoEval)
+            
             metric_items = [
                 'mAP', 'mAP_50', 'mAP_75', 'mAP_s', 'mAP_m', 'mAP_l'
             ]

@@ -187,3 +187,120 @@ def computeCentroids(cocoeval, iou_thr=0.75,save_dir='', save_path='centroids.pk
     filehandler = open(save_path, 'wb')
     pickle.dump(centroids, filehandler)
     print("centroids have been saved to: {}".format(save_path))
+
+
+
+def opensummarize(cocoEval):
+    '''
+    Compute and display summary metrics for evaluation results.
+    Note this functin can *only* be applied on the default parameter
+    setting
+    '''
+    def _summarize(ap=1, iouThr=None, areaRng='all', maxDets=100, F1=False, open_range=None):
+        p = cocoEval.params
+        iStr = '{:<18} {} @[ IoU={:<9} | area={:>6s} | maxDets={:>3d} ] = {:0.3f}'  # noqa: E501
+        titleStr = 'Average Precision' if ap == 1 else 'Average Recall'
+        typeStr = '(AP)' if ap == 1 else '(AR)'
+        if F1:
+            titleStr = 'Average F1Score'
+            typeStr = '(F1)'
+
+        if open_range is not None:
+            titleStr.replace("Average",open_range)
+
+
+        iouStr = '{:0.2f}:{:0.2f}'.format(p.iouThrs[0], p.iouThrs[-1]) \
+            if iouThr is None else '{:0.2f}'.format(iouThr)
+
+        aind = [
+            i for i, aRng in enumerate(p.areaRngLbl) if aRng == areaRng
+        ]
+        mind = [i for i, mDet in enumerate(p.maxDets) if mDet == maxDets]
+        if F1:
+            precision = cocoEval.eval['precision']
+            recall = cocoEval.eval['recall']
+            if iouThr is not None:
+                t = np.where(iouThr == p.iouThrs)[0]
+                precision = precision[t]
+                recall = recall[t]
+            if open_range == "Known":
+                precision = precision[:, :, :50, aind, mind]
+                recall = recall[:, :50, aind, mind]
+            elif open_range =="Unknown":
+                precision = precision[:, :, 50:, aind, mind]
+                recall = recall[:, 50:, aind, mind]
+            else:
+                precision = precision[:, :, :, aind, mind]
+                recall = recall[:, :, aind, mind]
+
+            if len(precision[precision > -1]) == 0:
+                mean_precision = -1
+            else:
+                mean_precision = np.mean(precision[precision > -1])
+            if len(recall[recall > -1]) == 0:
+                mean_recall = -1
+            else:
+                mean_recall = np.mean(recall[recall > -1])
+            mean_F1 = 2*mean_recall*mean_precision/(mean_recall+mean_precision+np.spacing(1))
+            print(
+                iStr.format(titleStr, typeStr, iouStr, areaRng, maxDets,
+                            mean_F1))
+            return mean_F1
+
+        if ap == 1:
+            # dimension of precision: [TxRxKxAxM]
+            s = cocoEval.eval['precision']
+            # IoU
+            if iouThr is not None:
+                t = np.where(iouThr == p.iouThrs)[0]
+                s = s[t]
+            if open_range == "Known":
+                s = s[:, :, :50, aind, mind]
+            elif open_range =="Unknown":
+                s = s[:, :, 50:, aind, mind]
+            else:
+                s = s[:, :, :, aind, mind]
+        else:
+            # dimension of recall: [TxKxAxM]
+            s = cocoEval.eval['recall']
+            if iouThr is not None:
+                t = np.where(iouThr == p.iouThrs)[0]
+                s = s[t]
+            if open_range == "Known":
+                s = s[:, :50, aind, mind]
+            elif open_range =="Unknown":
+                s = s[:, 50:, aind, mind]
+            else:
+                s = s[:, :, aind, mind]
+        if len(s[s > -1]) == 0:
+            mean_s = -1
+        else:
+            mean_s = np.mean(s[s > -1])
+        print(
+            iStr.format(titleStr, typeStr, iouStr, areaRng, maxDets,
+                        mean_s))
+        return mean_s
+
+    def _summarizeDets():
+        stats = np.zeros((15, ))
+        # All
+        stats[0] = _summarize(1)
+        stats[1] = _summarize(0, maxDets=cocoEval.params.maxDets[2])
+        stats[2] = _summarize(1,F1=True)
+        # Known
+        stats[0] = _summarize(1,open_range="Known")
+        stats[1] = _summarize(0, maxDets=cocoEval.params.maxDets[2],open_range="Known")
+        stats[2] = _summarize(1, F1=True,open_range="Known")
+        #Unkown
+        stats[0] = _summarize(1,open_range="Unknown")
+        stats[1] = _summarize(0, maxDets=cocoEval.params.maxDets[2],open_range="Unknown")
+        stats[2] = _summarize(1, F1=True,open_range="Unknown")
+        return stats
+
+
+    if not cocoEval.eval:
+        raise Exception('Please run accumulate() first')
+    iouType = cocoEval.params.iouType
+    summarize = _summarizeDets
+    cocoEval.stats = summarize()
+
