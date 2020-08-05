@@ -60,7 +60,7 @@ class CocoDataset(CustomDataset):
 
         self.coco = COCO(ann_file)
         # self.cat_ids = self.coco.get_cat_ids(cat_names=self.CLASSES)
-        self.cat_ids = list(range(1,50+1))
+        self.cat_ids = list(range(1,51+1))
 
         # print("____________running load_annotations____________")
         # print("________start: cat_ids_____________")
@@ -271,7 +271,7 @@ class CocoDataset(CustomDataset):
                     data['bbox'] = self.xyxy2xywh(bboxes[i])
                     data['score'] = float(bboxes[i][4])
                     data['feature'] = features[i].tolist()
-                    if data['score'] > score_threshold:
+                    if data['score'] > score_threshold: # for softmax with threshold
                         try:
                             data['category_id'] = self.cat_ids[label]
                         except:
@@ -917,7 +917,7 @@ class CocoDataset(CustomDataset):
 
         return eval_results
 
-    def evaluate3(self,
+    def openevaluate(self,
                  results,
                  metric='bbox',
                  logger=None,
@@ -990,74 +990,61 @@ class CocoDataset(CustomDataset):
             cocoEval = COCOeval(cocoGt, cocoDt, iou_type)
             cocoEval.params.catIds = self.cat_ids
             cocoEval.params.imgIds = self.img_ids
-            if metric == 'proposal':
-                cocoEval.params.useCats = 0
-                cocoEval.params.maxDets = list(proposal_nums)
-                cocoEval.evaluate()
-                cocoEval.accumulate()
-                cocoEval.summarize()
-                metric_items = [
-                    'AR@100', 'AR@300', 'AR@1000', 'AR_s@1000', 'AR_m@1000',
-                    'AR_l@1000'
-                ]
-                for i, item in enumerate(metric_items):
-                    val = float(f'{cocoEval.stats[i + 6]:.3f}')
-                    eval_results[item] = val
-            else:
 
-                cocoEval.evaluate()
 
-                # ############calculate centroids ######################
-                # cocoevalhelper.computeCentroids(cocoEval)
+            cocoEval.evaluate()
 
-                # cocoEval.accumulate()
-                self.accumulate(cocoEval)
-                self.summarize(cocoEval)
-                if classwise:  # Compute per-category AP
-                    # Compute per-category AP
-                    # from https://github.com/facebookresearch/detectron2/
-                    precisions = cocoEval.eval['precision']
-                    # precision: (iou, recall, cls, area range, max dets)
-                    assert len(self.cat_ids) == precisions.shape[2]
+            # ############calculate centroids ######################
+            # cocoevalhelper.computeCentroids(cocoEval)
 
-                    results_per_category = []
-                    for idx, catId in enumerate(self.cat_ids):
-                        # area range index 0: all area ranges
-                        # max dets index -1: typically 100 per image
-                        nm = self.coco.loadCats(catId)[0]
-                        precision = precisions[:, :, idx, 0, -1]
-                        precision = precision[precision > -1]
-                        if precision.size:
-                            ap = np.mean(precision)
-                        else:
-                            ap = float('nan')
-                        results_per_category.append(
-                            (f'{nm["name"]}', f'{float(ap):0.3f}'))
+            # cocoEval.accumulate()
+            self.accumulate(cocoEval)
+            self.summarize(cocoEval)
+            if classwise:  # Compute per-category AP
+                # Compute per-category AP
+                # from https://github.com/facebookresearch/detectron2/
+                precisions = cocoEval.eval['precision']
+                # precision: (iou, recall, cls, area range, max dets)
+                assert len(self.cat_ids) == precisions.shape[2]
 
-                    num_columns = min(6, len(results_per_category) * 2)
-                    results_flatten = list(
-                        itertools.chain(*results_per_category))
-                    headers = ['category', 'AP'] * (num_columns // 2)
-                    results_2d = itertools.zip_longest(*[
-                        results_flatten[i::num_columns]
-                        for i in range(num_columns)
-                    ])
-                    table_data = [headers]
-                    table_data += [result for result in results_2d]
-                    table = AsciiTable(table_data)
-                    print_log('\n' + table.table, logger=logger)
+                results_per_category = []
+                for idx, catId in enumerate(self.cat_ids):
+                    # area range index 0: all area ranges
+                    # max dets index -1: typically 100 per image
+                    nm = self.coco.loadCats(catId)[0]
+                    precision = precisions[:, :, idx, 0, -1]
+                    precision = precision[precision > -1]
+                    if precision.size:
+                        ap = np.mean(precision)
+                    else:
+                        ap = float('nan')
+                    results_per_category.append(
+                        (f'{nm["name"]}', f'{float(ap):0.3f}'))
 
-                metric_items = [
-                    'mAP', 'mAP_50', 'mAP_75', 'mAP_s', 'mAP_m', 'mAP_l'
-                ]
-                for i in range(len(metric_items)):
-                    key = f'{metric}_{metric_items[i]}'
-                    val = float(f'{cocoEval.stats[i]:.3f}')
-                    eval_results[key] = val
-                ap = cocoEval.stats[:6]
-                eval_results[f'{metric}_mAP_copypaste'] = (
-                    f'{ap[0]:.3f} {ap[1]:.3f} {ap[2]:.3f} {ap[3]:.3f} '
-                    f'{ap[4]:.3f} {ap[5]:.3f}')
+                num_columns = min(6, len(results_per_category) * 2)
+                results_flatten = list(
+                    itertools.chain(*results_per_category))
+                headers = ['category', 'AP'] * (num_columns // 2)
+                results_2d = itertools.zip_longest(*[
+                    results_flatten[i::num_columns]
+                    for i in range(num_columns)
+                ])
+                table_data = [headers]
+                table_data += [result for result in results_2d]
+                table = AsciiTable(table_data)
+                print_log('\n' + table.table, logger=logger)
+
+            metric_items = [
+                'mAP', 'mAP_50', 'mAP_75', 'mAP_s', 'mAP_m', 'mAP_l'
+            ]
+            for i in range(len(metric_items)):
+                key = f'{metric}_{metric_items[i]}'
+                val = float(f'{cocoEval.stats[i]:.3f}')
+                eval_results[key] = val
+            ap = cocoEval.stats[:6]
+            eval_results[f'{metric}_mAP_copypaste'] = (
+                f'{ap[0]:.3f} {ap[1]:.3f} {ap[2]:.3f} {ap[3]:.3f} '
+                f'{ap[4]:.3f} {ap[5]:.3f}')
         if tmp_dir is not None:
             tmp_dir.cleanup()
         return eval_results

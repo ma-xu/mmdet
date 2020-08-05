@@ -153,10 +153,10 @@ def main():
             dataset.format_results(new_outputs, **kwargs)
         if args.eval:
 
-            dataset.evaluate3(new_outputs, args.eval, **kwargs)
+            dataset.openevaluate(new_outputs, args.eval, **kwargs)
 
             print("original output:")
-            dataset.evaluate3(outputs, args.eval, **kwargs)
+            dataset.openevaluate(outputs, args.eval, **kwargs)
 
 
 if __name__ == '__main__':
