@@ -121,12 +121,11 @@ def main():
     known_classes = list(range(1, args.knownclass))
     for image in outputs:
         bboxes, segs, feas = image
-        for fea in feas:
-            for cat_fea in fea:
-                if len(cat_fea)>0:
-                    for roi_cat_fea in cat_fea:
-                        so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
-                        print(so)
+        for cat_fea in feas:
+            if len(cat_fea)>0:
+                for roi_cat_fea in cat_fea:
+                    so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
+                    print(so)
 
 
 
