@@ -3,6 +3,7 @@ import os
 
 import mmcv
 import torch
+from tqdm import tqdm
 from mmcv import Config, DictAction
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
 from mmcv.runner import get_dist_info, init_dist, load_checkpoint
@@ -120,7 +121,7 @@ def main():
 
     new_outputs= []
     known_classes = list(range(1, args.knownclass+1))
-    for image in outputs:
+    for image in tqdm(outputs):
         bboxes, segs, feas = image
         new_bboxes = [ [] for _ in range(0,args.knownclass+1)]
         new_segs = [ [] for _ in range(0,args.knownclass+1)]
