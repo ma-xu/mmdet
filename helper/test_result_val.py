@@ -154,6 +154,9 @@ def main():
 
             dataset.evaluate3(new_outputs, args.eval, **kwargs)
 
+            print("original output:")
+            dataset.evaluate3(outputs, args.eval, **kwargs)
+
 
 if __name__ == '__main__':
     main()
