@@ -26,6 +26,7 @@ def parse_args():
                         help='output result file in pickle format')
     parser.add_argument('--weibull', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/weibull_model.pkl',
                         help='output result file in pickle format')
+    parser.add_argument('--threshold',type=float,default=0.1, help='score threshold for known classes')
     parser.add_argument('--knownclass', type=int, default=50, help="the number of known classes")
     parser.add_argument(
         '--fuse-conv-bn',
@@ -117,16 +118,19 @@ def main():
 
     weibull_model = mmcv.load(args.weibull)
 
-    new_out= []
+    new_outputs= []
     known_classes = list(range(1, args.knownclass))
     for image in outputs:
         bboxes, segs, feas = image
+        new_bboxes = [ [] for _ in bboxes]
+        new_segs = [ [] for _ in segs]
+        new_feas = [ [] for _ in feas]
         for cat_fea in feas:
             if len(cat_fea)>0:
                 for roi_cat_fea in cat_fea:
                     roi_cat_fea = np.expand_dims(roi_cat_fea, axis=0)
                     so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
-                    print(so)
+                    predicted_label = np.argmax(so) if np.max(so) >= args.threshold else args.knownclass+1
 
 
 
