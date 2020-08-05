@@ -125,7 +125,7 @@ def main():
             for cat_fea in fea:
                 if len(cat_fea)>0:
                     for roi_cat_fea in cat_fea:
-                        so, _ = openmax(weibull_model, known_classes, feas, 0.5, 3, "euclidean")
+                        so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, 3, "euclidean")
                         print(so)
 
 
