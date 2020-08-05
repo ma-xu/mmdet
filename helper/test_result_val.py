@@ -22,7 +22,7 @@ def parse_args():
         description='Lightweight MMDet test (and eval) a model from the results.pkl')
     parser.add_argument('config', help='test config file path')
     parser.add_argument('checkpoint', help='checkpoint file')
-    parser.add_argument('--out', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_val.pkl',
+    parser.add_argument('--out', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/output_val.pkl',
                         help='output result file in pickle format')
     parser.add_argument('--weibull', default='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/weibull_model.pkl',
                         help='output result file in pickle format')
