@@ -136,7 +136,7 @@ def main():
                     new_bboxes[predicted_label_index].append(bboxes[i][j])
 
         new_feas = [np.asarray(new_fea) for new_fea in new_feas]
-        new_segs = [np.asarray(new_seg) for new_seg in new_seg]
+        new_segs = [np.asarray(new_seg) for new_seg in new_segs]
         new_bboxes = [np.asarray(new_bbox) for new_bbox in new_bboxes]
 
         new_image= new_bboxes,new_segs,new_feas
