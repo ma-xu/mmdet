@@ -119,7 +119,7 @@ def main():
     weibull_model = mmcv.load(args.weibull)
 
     new_outputs= []
-    known_classes = list(range(1, args.knownclass))
+    known_classes = list(range(1, args.knownclass+1))
     for image in outputs:
         bboxes, segs, feas = image
         new_bboxes = [ [] for _ in range(0,args.knownclass+1)]
