@@ -135,8 +135,12 @@ def main():
                     new_segs[predicted_label_index].append(segs[i][j])
                     new_bboxes[predicted_label_index].append(bboxes[i][j])
 
+        new_feas = [np.asarray(new_fea) for new_fea in new_feas]
+        new_segs = [np.asarray(new_seg) for new_seg in new_seg]
+        new_bboxes = [np.asarray(new_bbox) for new_bbox in new_bboxes]
 
-
+        new_image= new_bboxes,new_segs,new_feas
+        new_outputs.append(new_image)
 
         so, _ = openmax(weibull_model, dataset.CLASSES, feas, 0.5, 3, "euclidean")
         seg = np.argsort(segs, so)
