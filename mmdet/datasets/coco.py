@@ -272,7 +272,10 @@ class CocoDataset(CustomDataset):
                     data['score'] = float(bboxes[i][4])
                     data['feature'] = features[i].tolist()
                     if data['score'] > score_threshold:
-                        data['category_id'] = self.cat_ids[label]
+                        try:
+                            data['category_id'] = self.cat_ids[label]
+                        except:
+                            data['category_id'] = 51
                     else:
                         data['category_id'] = 51
                     bbox_json_results.append(data)
