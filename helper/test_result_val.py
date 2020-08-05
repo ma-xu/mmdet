@@ -142,25 +142,16 @@ def main():
         new_image= new_bboxes,new_segs,new_feas
         new_outputs.append(new_image)
 
-        so, _ = openmax(weibull_model, dataset.CLASSES, feas, 0.5, 3, "euclidean")
-        seg = np.argsort(segs, so)
-        bbox = np.argsort(bboxes,so)
-        fea = np.argsort(feas,so)
-        sub_out = bbox,seg,fea
-        new_outputs.append(sub_out)
-
-
-
-    print("Output loaded!!")
+    print("New ouput of openmax generated!!")
 
     rank, _ = get_dist_info()
     if rank == 0:
         kwargs = {} if args.options is None else args.options
         if args.format_only:
-            dataset.format_results(new_out, **kwargs)
+            dataset.format_results(new_outputs, **kwargs)
         if args.eval:
 
-            dataset.evaluate3(new_out, args.eval, **kwargs)
+            dataset.evaluate3(new_outputs, args.eval, **kwargs)
 
 
 if __name__ == '__main__':
