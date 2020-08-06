@@ -288,13 +288,13 @@ def opensummarize(cocoEval):
         stats[1] = _summarize(0, maxDets=cocoEval.params.maxDets[2])
         stats[2] = _summarize(1,F1=True)
         # Known
-        stats[0] = _summarize(1,open_range="Known")
-        stats[1] = _summarize(0, maxDets=cocoEval.params.maxDets[2],open_range="Known")
-        stats[2] = _summarize(1, F1=True,open_range="Known")
+        stats[3] = _summarize(1,open_range="Known")
+        stats[4] = _summarize(0, maxDets=cocoEval.params.maxDets[2],open_range="Known")
+        stats[5] = _summarize(1, F1=True,open_range="Known")
         #Unkown
-        stats[0] = _summarize(1,open_range="Unknown")
-        stats[1] = _summarize(0, maxDets=cocoEval.params.maxDets[2],open_range="Unknown")
-        stats[2] = _summarize(1, F1=True,open_range="Unknown")
+        stats[6] = _summarize(1,open_range="Unknown")
+        stats[7] = _summarize(0, maxDets=cocoEval.params.maxDets[2],open_range="Unknown")
+        stats[8] = _summarize(1, F1=True,open_range="Unknown")
         return stats
 
 
