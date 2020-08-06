@@ -206,7 +206,7 @@ def opensummarize(cocoEval):
             typeStr = '(F1)'
 
         if open_range is not None:
-            titleStr.replace("Average",open_range)
+            titleStr = titleStr.replace("Average",open_range)
 
 
         iouStr = '{:0.2f}:{:0.2f}'.format(p.iouThrs[0], p.iouThrs[-1]) \
