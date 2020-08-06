@@ -131,7 +131,7 @@ def main():
             if len(feas[i])>0:
                 for j in range(0,len(feas[i])):
                     roi_cat_fea = np.expand_dims(feas[i][j], axis=0)
-                    so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, args.alpha, "eucos")
+                    so, _ = openmax(weibull_model, known_classes, roi_cat_fea, 0.5, args.alpha, "euclidean")
                     predicted_label_index = np.argmax(so) if np.max(so) >= args.threshold else args.knownclass
                     new_feas[predicted_label_index].append(feas[i][j])
                     new_segs[predicted_label_index].append(segs[i][j])
