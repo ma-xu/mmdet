@@ -43,5 +43,11 @@ python2 split_coco_OSR.py --known_num 50 --ann_dir /path_to_coco_annotations
 ```
 This command will generate two files in annotations folder: instances_train2017_OSR{known_num}.json and instances_val2017_OSR{known_num}.json
 
-
-
+Soft link data to mmdet
+```
+cd ~
+cd mmdet
+mkdir data
+cd data
+ln -s {path_to_coco}
+```
