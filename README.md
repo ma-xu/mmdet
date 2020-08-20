@@ -66,7 +66,7 @@ mmdetection
 ```
 ## Training Original Mask RCNN on Known classes
 Train with multiple GPUs
-```
+```shell
 # ./tools/dist_train.sh ${CONFIG_FILE} ${GPU_NUM} [optional arguments]
 ./tools/dist_train.sh configs/unknown/mask_rcnn_coco_50.py 8 --no-validate
 
