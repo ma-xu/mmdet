@@ -117,8 +117,8 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            # result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_train')
-            # print("format files done!!!")
+            result_files, tmp_dir = dataset.format_results(results=outputs, jsonfile_prefix='/home/xuma/mmdet/work_dirs/mask_rcnn_osr50/result_train')
+            print("format files done!!!")
             # return 0
             #
             # print(result_files)
