@@ -71,3 +71,30 @@ Train with multiple GPUs
 ./tools/dist_train.sh configs/unknown/mask_rcnn_coco_50.py 8 --no-validate
 
 ```
+
+## Saving the score (evaluate result) of training set
+```shell
+python test.py config/unknown/mask_rcnn_coco_50.py work_dirs/{mask_rcnn_coco_50}/{epoch_24.pth} --eval segm --out {path_to_score.pkl}
+
+```
+
+## Calculating  centroids
+Here we save the result json and centroids of training dataset. <br>
+Change the saving path in helper/test_result.py Line 120, 127-129 accordingly.<br>
+Change the path to centroids in mmdet/datasets/coco.py Line 867 accordingly.<br>
+Calculate centroids:
+```
+cd helper
+python test_result.py config/unknown/mask_rcnn_coco_50.py work_dirs/{mask_rcnn_coco_50}/{epoch_24.pth} --eval segm --out {path_to_score.pkl}
+```
+
+## Fitting Weibull distribution
+```
+python openmax_helper.py --centroids {path_to_centroids.pkl} --score_path {path_to_score.pkl} --save_path {folder_to_weibull_model.pkl}
+```
+
+## Evaluate OpenMax Mask RCNN
+```
+python test_result_val.py config/unknown/mask_rcnn_coco_50.py work_dirs/{mask_rcnn_coco_50}/{epoch_24.pth} --out {path_to_score.pkl} --weibull {folder_to_weibull_model.pkl}
+```
+You can change the threshold adaptively by adding --threshold = 0.2. We set it to 0.1 by default.
