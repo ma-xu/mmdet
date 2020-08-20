@@ -51,3 +51,16 @@ mkdir data
 cd data
 ln -s {path_to_coco}
 ```
+Up to now, the structure of your project should be:
+```
+mmdetection
+├── mmdet
+├── tools
+├── configs
+├── data
+│   ├── coco
+│   │   ├── annotations
+│   │   ├── train2017
+│   │   ├── val2017
+...
+```
