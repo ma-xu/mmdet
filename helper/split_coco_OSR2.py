@@ -34,6 +34,7 @@ def convert(args):
     # known_classes = rnd.choice(np.arange(1,80), args.known_num, replace=False)
     # known_classes = random.sample(original,args.known_num)
     known_classes = rnd.choice(original, args.known_num, replace=False).tolist()
+    print(known_classes)
 
     Training_parser = True
     Validation_parser = True
@@ -55,7 +56,7 @@ def convert(args):
         print("Start processing {} annotations".format(len(annotations)))
         ann_id = 0
         for i in range(0, len(annotations)):
-            if i % 10000 == 0:
+            if i % 50000 == 0:
                 print('# Training annotations processed: {}'.format(i))
             ann = annotations[i]
             if ann["category_id"] not in known_classes:
@@ -63,8 +64,8 @@ def convert(args):
             else:
                 ann['id'] = ann_id
                 ann_id = ann_id + 1
-                ann['original_category_id'] = ann['category_id']
-                ann['category_id'] = known_classes.index(ann['original_category_id']) + 1
+                # ann['original_category_id'] = ann['category_id']
+                # ann['category_id'] = known_classes.index(ann['original_category_id']) + 1
                 annotations_OSR.append(ann)
 
         data_out = {
@@ -96,7 +97,8 @@ def convert(args):
             ann = annotations[i]
             ann['original_category_id'] = ann['category_id']
             if ann["category_id"] not in known_classes:
-                ann['category_id'] =args.known_num+1
+                # ann['category_id'] =args.known_num+1
+                ann['category_id'] = 91
             else:
                 ann['category_id'] = known_classes.index(ann['original_category_id']) + 1
             ann['id'] = ann_id
