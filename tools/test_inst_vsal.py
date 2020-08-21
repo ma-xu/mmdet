@@ -49,6 +49,10 @@ def vis_seg(data, result, img_norm_cfg, data_id, colors, score_thr, save_dir):
             score = cur_result[2]
 
         vis_inds = score > score_thr
+        print(f"vis_inds length: {len(vis_inds)}")
+        print(f"seg_label length: {len(seg_label)}")
+        print(f"vis_inds is: {vis_inds}")
+        print(f"seg_label is: {seg_label}")
         seg_label = seg_label[vis_inds]
         num_mask = seg_label.shape[0]
         cate_label = cate_label[vis_inds]
