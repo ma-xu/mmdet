@@ -111,6 +111,7 @@ def single_gpu_test(model, data_loader, args, cfg=None, verbose=True):
         results.append(result)
 
         if verbose:
+            print(f"seg_result {seg_result}")
             vis_seg(data, seg_result, cfg.img_norm_cfg, data_id=i, colors=colors, score_thr=args.score_thr,
                     save_dir=args.save_dir)
 
