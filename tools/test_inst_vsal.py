@@ -50,10 +50,10 @@ def vis_seg(data, result, img_norm_cfg, data_id, colors, score_thr, save_dir):
             score = cur_result[2]
 
         vis_inds = score > score_thr
-        print(f"vis_inds length: {len(vis_inds)}")
-        print(f"seg_label length: {len(seg_label)}")
-        print(f"vis_inds is: {vis_inds}")
-        print(f"seg_label is: {seg_label}")
+        # print(f"vis_inds length: {len(vis_inds)}")
+        # print(f"seg_label length: {len(seg_label)}")
+        # print(f"vis_inds is: {vis_inds}")
+        # print(f"seg_label is: {seg_label}")
         seg_label = seg_label[vis_inds]
         num_mask = seg_label.shape[0]
         cate_label = cate_label[vis_inds]
@@ -108,7 +108,7 @@ def single_gpu_test(model, data_loader, args, cfg=None, verbose=True):
     for i, data in enumerate(data_loader):
         with torch.no_grad():
             seg_result = model(return_loss=False, rescale=True, **data)
-            print(f"\n\n\n seg_result : \n {seg_result}\n\n\n")
+            # print(f"\n\n\n seg_result : \n {seg_result}\n\n\n")
             result = None
         results.append(result)
 
@@ -266,8 +266,10 @@ def main():
     # for backward compatibility
     if 'CLASSES' in checkpoint['meta']:
         model.CLASSES = checkpoint['meta']['CLASSES']
+        print("checkpoint['meta']['CLASSES']: {model.CLASSES}")
     else:
         model.CLASSES = dataset.CLASSES
+        print("dataset.CLASSES: {model.CLASSES}")
 
     assert not distributed
     if not distributed:
