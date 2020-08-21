@@ -37,12 +37,12 @@ def vis_seg(data, result, img_norm_cfg, data_id, colors, score_thr, save_dir):
         img_show = img[:h, :w, :]
 
         seg_label = cur_result[0]
+        cate_label = cur_result[1]
         try:
             seg_label = seg_label.cpu().numpy().astype(np.uint8)
             cate_label = cate_label.cpu().numpy()
         except:
             seg_label = seg_label.astype(np.uint8)
-        cate_label = cur_result[1]
         try:
             score = cur_result[2].cpu().numpy()
         except:
@@ -111,7 +111,7 @@ def single_gpu_test(model, data_loader, args, cfg=None, verbose=True):
         results.append(result)
 
         if verbose:
-            print(f"seg_result {seg_result}")
+
             vis_seg(data, seg_result, cfg.img_norm_cfg, data_id=i, colors=colors, score_thr=args.score_thr,
                     save_dir=args.save_dir)
 
