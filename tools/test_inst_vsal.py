@@ -37,6 +37,7 @@ def vis_seg(data, result, img_norm_cfg, data_id, colors, score_thr, save_dir):
         img_show = img[:h, :w, :]
 
         seg_label = cur_result[0]
+        print(f"cur_result[0] {cur_result[0]}")
         cate_label = cur_result[1]
         try:
             seg_label = seg_label.cpu().numpy().astype(np.uint8)
