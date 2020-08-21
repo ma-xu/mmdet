@@ -37,7 +37,7 @@ def vis_seg(data, result, img_norm_cfg, data_id, colors, score_thr, save_dir):
         img_show = img[:h, :w, :]
 
         seg_label = cur_result[0]
-        print(f"\ncur_result {cur_result}\n")
+
         cate_label = cur_result[1]
         try:
             seg_label = seg_label.cpu().numpy().astype(np.uint8)
@@ -266,10 +266,10 @@ def main():
     # for backward compatibility
     if 'CLASSES' in checkpoint['meta']:
         model.CLASSES = checkpoint['meta']['CLASSES']
-        print("checkpoint['meta']['CLASSES']: {model.CLASSES}")
+        print(f"checkpoint['meta']['CLASSES']: {model.CLASSES}")
     else:
         model.CLASSES = dataset.CLASSES
-        print("dataset.CLASSES: {model.CLASSES}")
+        print(f"dataset.CLASSES: {model.CLASSES}")
 
     assert not distributed
     if not distributed:
